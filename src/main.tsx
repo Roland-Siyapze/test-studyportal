@@ -1,10 +1,21 @@
+/**
+ * @file main.tsx
+ * @description Application entry point.
+ *   React 19 strict mode is enabled for development warnings.
+ */
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
+import App from './App'
 
-createRoot(document.getElementById('root')!).render(
+const rootElement = document.getElementById('root')
+if (!rootElement) {
+  throw new Error('Root element #root not found in index.html')
+}
+
+createRoot(rootElement).render(
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
 )
