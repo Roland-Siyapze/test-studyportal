@@ -14,9 +14,10 @@ export default function App(): JSX.Element {
   const { initAuth, isInitialized } = useAuth()
 
   // Run auth initialisation exactly once on mount
+  // Empty dependency array ensures this runs only once, even in Strict Mode
   useEffect(() => {
     void initAuth()
-  }, [initAuth])
+  }, [])
 
   // Block rendering until Keycloak (or mock) has resolved
   if (!isInitialized) return <PageLoader />

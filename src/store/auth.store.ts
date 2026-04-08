@@ -13,6 +13,13 @@ import { devtools } from 'zustand/middleware'
 import type { AuthUser } from '@contracts/api-contracts'
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Constants
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Stable empty array to prevent infinite loops in selectors */
+const EMPTY_AUTHORITIES: string[] = []
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Store shape
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -78,4 +85,4 @@ export const selectIsAuthenticated = (state: AuthState): boolean =>
 
 /** Returns the authorities array or empty array when unauthenticated */
 export const selectAuthorities = (state: AuthState): string[] =>
-  state.user?.authorities ?? []
+  state.user?.authorities ?? EMPTY_AUTHORITIES

@@ -10,6 +10,7 @@
  *              TEST-001 (unit-tested in usePermissions.test.ts)
  */
 
+import { useCallback } from 'react'
 import { useAuthStore, selectAuthorities } from '@store/auth.store'
 import type { Permission } from '@contracts/api-contracts'
 
@@ -45,14 +46,23 @@ export function usePermissions(): UsePermissionsReturn {
   // user profile changes (login / logout / profile switch).
   const authorities = useAuthStore(selectAuthorities)
 
-  const hasPermission = (scope: Permission): boolean =>
-    authorities.includes(scope)
+  // Memoize helper functions to prevent unnecessary re-renders of consuming components
+  const hasPermission = useCallback(
+    (scope: Permission): boolean => authorities.includes(scope),
+    [authorities]
+  )
 
-  const hasAnyPermission = (scopes: Permission[]): boolean =>
-    scopes.some((scope) => authorities.includes(scope))
+  const hasAnyPermission = useCallback(
+    (scopes: Permission[]): boolean =>
+      scopes.some((scope) => authorities.includes(scope)),
+    [authorities]
+  )
 
-  const hasAllPermissions = (scopes: Permission[]): boolean =>
-    scopes.every((scope) => authorities.includes(scope))
+  const hasAllPermissions = useCallback(
+    (scopes: Permission[]): boolean =>
+      scopes.every((scope) => authorities.includes(scope)),
+    [authorities]
+  )
 
   return { hasPermission, hasAnyPermission, hasAllPermissions, authorities }
 }

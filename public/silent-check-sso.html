@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Silent Check SSO</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * @file silent-check-sso.html
+       * @description Required by Keycloak for silent SSO check.
+       *
+       * This page is loaded in a hidden iframe by Keycloak to check if the user
+       * has an active session without triggering a visible redirect. Keycloak
+       * uses the iframe to communicate back to the parent window.
+       *
+       * If the user has an active session, Keycloak will append a fragment
+       * to this page's URL with the OAuth callback data.
+       *
+       * This is a standard pattern used by Keycloak and must not be modified.
+       */
+      
+      // For Keycloak to detect the iframe has loaded, we simply do nothing.
+      // Keycloak checks for the page's successful load (HTTP 200) to determine
+      // if a session check was successful or timed out.
+    </script>
+  </body>
+</html>

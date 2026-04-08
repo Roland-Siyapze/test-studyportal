@@ -23,6 +23,14 @@ import { mockAuthenticate } from '@services/mock/auth.mock'
 import type { AuthUser } from '@contracts/api-contracts'
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Module-level guard to prevent multiple keycloak.init() calls
+// This is necessary because React Strict Mode calls effects twice, and
+// keycloak.init() can only be called once per instance.
+// ─────────────────────────────────────────────────────────────────────────────
+
+let hasStartedInitialization = false
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Hook
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -62,40 +70,85 @@ export function useAuth(): UseAuthReturn {
   // ── Init ────────────────────────────────────────────────────────────────
 
   const initAuth = useCallback(async (): Promise<void> => {
-    if (isInitialized) return
+    // CRITICAL: Use module-level flag to prevent multiple init attempts
+    // React Strict Mode calls effects twice, so we need this guard
+    if (hasStartedInitialization) {
+      console.log('[useAuth] Initialization already in progress or completed, skipping...')
+      return
+    }
+
+    hasStartedInitialization = true
+    console.log('[useAuth] Marking initialization as started')
 
     setLoading(true)
 
     try {
       if (IS_MOCK_AUTH) {
         // In mock mode we don't auto-login — user must fill the login form.
-        // Just mark as initialized so the router can render the login page.
+        console.log('[useAuth] Mock auth mode enabled')
         setInitialized(true)
       } else {
-        // Attempt silent SSO — if a valid Keycloak session already exists
-        // the user is logged in without seeing the login page.
-        const authenticated = await keycloak.init({
+        // Initialize keycloak-js for the current page load.
+        console.log('[useAuth] Starting Keycloak init...')
+        
+        // Create a promise that times out after 10 seconds
+        // This prevents hanging if the silent SSO check fails
+        const initPromise = keycloak.init({
           onLoad: 'check-sso',
           silentCheckSsoRedirectUri:
             window.location.origin + '/silent-check-sso.html',
           pkceMethod: 'S256',
+          redirectUri: window.location.origin + '/',
+          checkLoginIframe: false,
         })
 
+        const timeoutPromise = new Promise<boolean>((_, reject) =>
+          setTimeout(
+            () => { reject(new Error('Keycloak init timeout after 10 seconds')); },
+            10000
+          )
+        )
+
+        let authenticated = false
+        try {
+          authenticated = await Promise.race([initPromise, timeoutPromise])
+          console.log('[useAuth] Keycloak init completed successfully', { authenticated })
+        } catch (timeoutErr) {
+          console.warn('[useAuth] Keycloak init timed out, but proceeding anyway', timeoutErr)
+          // Don't fail the whole auth flow if init times out
+          // Just mark as initialized and let the user try to login
+          authenticated = false
+        }
+
         if (authenticated && keycloak.token) {
-          const decoded = decodeTokenPayload<AuthUser>(keycloak.token)
-          setUser(decoded)
+          console.log('[useAuth] User authenticated, decoding token...')
+          try {
+            const decoded = decodeTokenPayload<AuthUser>(keycloak.token)
+            console.log('[useAuth] Token decoded successfully', {
+              sub: decoded.sub,
+              email: decoded.email,
+              authorities: decoded.authorities.length || 0,
+            })
+            setUser(decoded)
+          } catch (decodeErr) {
+            console.error('[useAuth] Failed to decode token:', decodeErr)
+          }
+        } else {
+          console.log('[useAuth] Not authenticated or no token present after init')
         }
 
         setInitialized(true)
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Auth init failed'
-      setError(message)
+      console.error('[useAuth] Init error:', message)
+      // Don't set error state for init failures — allow user to try logging in
+      // Only set initialization to true so the page stops loading
       setInitialized(true)
     } finally {
       setLoading(false)
     }
-  }, [isInitialized, setError, setInitialized, setLoading, setUser])
+  }, [setError, setInitialized, setLoading, setUser])
 
   // ── Login ───────────────────────────────────────────────────────────────
 
@@ -112,15 +165,18 @@ export function useAuth(): UseAuthReturn {
           const authUser = await mockAuthenticate(email, password)
           setUser(authUser)
         } else {
-          // Redirect to the custom Keycloak login page
-          await keycloak.login({
-            redirectUri: window.location.origin + '/dashboard',
-          })
+          // Trigger Keycloak login flow
+          // The redirectUri was already set in keycloak.init(), so we don't
+          // override it here. Keycloak will redirect back to the app root (/)
+          // with the callback in the URL fragment. Then keycloak.init() on the
+          // next page load will process it.
+          await keycloak.login()
         }
       } catch (err) {
         const message =
           err instanceof Error ? err.message : 'Authentication failed'
         setError(message)
+        console.error('[useAuth] Login error:', message)
       } finally {
         setLoading(false)
       }
