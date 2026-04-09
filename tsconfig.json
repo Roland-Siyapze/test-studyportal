@@ -32,7 +32,8 @@
       "@components/*": ["src/components/*"],
       "@portals/*": ["src/portals/*"],
       "@store/*": ["src/store/*"],
-      "@router/*": ["src/router/*"]
+      "@router/*": ["src/router/*"],
+      "@assets/*": ["src/assets/*"]
     }
   },
   "include": ["src"],

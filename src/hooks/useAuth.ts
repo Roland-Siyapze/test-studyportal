@@ -18,6 +18,9 @@ import { useAuthStore } from '@store/auth.store'
 import keycloak, {
   IS_MOCK_AUTH,
   decodeTokenPayload,
+  revokeToken,
+  directGrantAuth,
+  extractAuthorities,
 } from '@services/keycloak.service'
 import { mockAuthenticate } from '@services/mock/auth.mock'
 import type { AuthUser } from '@contracts/api-contracts'
@@ -50,8 +53,8 @@ interface UseAuthReturn {
    * Production-mode: redirect to Keycloak login page.
    */
   login: (email?: string, password?: string) => Promise<void>
-  /** Clears the session and redirects to the login page. */
-  logout: () => void
+  /** Clears the session, revokes the token, and redirects to login. */
+  logout: () => Promise<void>
 }
 
 export function useAuth(): UseAuthReturn {
@@ -73,28 +76,36 @@ export function useAuth(): UseAuthReturn {
     // CRITICAL: Use module-level flag to prevent multiple init attempts
     // React Strict Mode calls effects twice, so we need this guard
     if (hasStartedInitialization) {
-      console.log('[useAuth] Initialization already in progress or completed, skipping...')
+      console.warn('[useAuth] Initialization already in progress or completed, skipping...')
       return
     }
 
     hasStartedInitialization = true
-    console.log('[useAuth] Marking initialization as started')
+    console.warn('[useAuth] Marking initialization as started')
 
     setLoading(true)
 
     try {
       if (IS_MOCK_AUTH) {
         // In mock mode we don't auto-login — user must fill the login form.
-        console.log('[useAuth] Mock auth mode enabled')
+        console.warn('[useAuth] Mock auth mode enabled')
         setInitialized(true)
       } else {
         // Initialize keycloak-js for the current page load.
-        console.log('[useAuth] Starting Keycloak init...')
+        console.warn('[useAuth] Starting Keycloak init...')
+        
+        // Determine init strategy based on current location
+        // On login page: don't auto-authenticate (force fresh login)
+        // On other pages: check for existing session (SSO)
+        const isOnLoginPage = window.location.pathname === '/login'
+        const onLoadStrategy = isOnLoginPage ? 'login-required' : 'check-sso'
+        
+        console.warn('[useAuth] Using init strategy:', { onLoadStrategy, isOnLoginPage })
         
         // Create a promise that times out after 10 seconds
         // This prevents hanging if the silent SSO check fails
         const initPromise = keycloak.init({
-          onLoad: 'check-sso',
+          onLoad: onLoadStrategy,
           silentCheckSsoRedirectUri:
             window.location.origin + '/silent-check-sso.html',
           pkceMethod: 'S256',
@@ -112,7 +123,7 @@ export function useAuth(): UseAuthReturn {
         let authenticated = false
         try {
           authenticated = await Promise.race([initPromise, timeoutPromise])
-          console.log('[useAuth] Keycloak init completed successfully', { authenticated })
+          console.warn('[useAuth] Keycloak init completed successfully', { authenticated })
         } catch (timeoutErr) {
           console.warn('[useAuth] Keycloak init timed out, but proceeding anyway', timeoutErr)
           // Don't fail the whole auth flow if init times out
@@ -121,20 +132,39 @@ export function useAuth(): UseAuthReturn {
         }
 
         if (authenticated && keycloak.token) {
-          console.log('[useAuth] User authenticated, decoding token...')
+          console.warn('[useAuth] User authenticated, decoding token...')
           try {
-            const decoded = decodeTokenPayload<AuthUser>(keycloak.token)
-            console.log('[useAuth] Token decoded successfully', {
-              sub: decoded.sub,
-              email: decoded.email,
-              authorities: decoded.authorities.length || 0,
+            const decoded = decodeTokenPayload(keycloak.token)
+            
+            // Debug: log the full token structure
+            console.error('[useAuth] Full token payload:', decoded)
+            
+            // Extract/normalize authorities from various token claim locations
+            const authorities = extractAuthorities(decoded)
+            
+            const authUser: AuthUser = {
+              sub: (decoded.sub as string) || '',
+              preferred_username: (decoded.preferred_username as string) || '',
+              email: (decoded.email as string) || '',
+              realm_access: decoded.realm_access as AuthUser['realm_access'],
+              resource_access: decoded.resource_access as AuthUser['resource_access'],
+              scope: (decoded.scope as string) || '',
+              authorities: authorities as AuthUser['authorities'],
+              exp: (decoded.exp as number) || 0,
+            }
+            
+            console.warn('[useAuth] Token decoded successfully', {
+              sub: authUser.sub,
+              email: authUser.email,
+              authorities: authorities.length,
             })
-            setUser(decoded)
+            setUser(authUser)
           } catch (decodeErr) {
             console.error('[useAuth] Failed to decode token:', decodeErr)
+            console.error('[useAuth] Raw token:', keycloak.token)
           }
         } else {
-          console.log('[useAuth] Not authenticated or no token present after init')
+          console.warn('[useAuth] Not authenticated or no token present after init')
         }
 
         setInitialized(true)
@@ -148,7 +178,7 @@ export function useAuth(): UseAuthReturn {
     } finally {
       setLoading(false)
     }
-  }, [setError, setInitialized, setLoading, setUser])
+  }, [setInitialized, setLoading, setUser])
 
   // ── Login ───────────────────────────────────────────────────────────────
 
@@ -165,7 +195,22 @@ export function useAuth(): UseAuthReturn {
           const authUser = await mockAuthenticate(email, password)
           setUser(authUser)
         } else {
-          // Trigger Keycloak login flow
+          // Production mode: try direct grant flow first (custom UI)
+          if (email && password) {
+            try {
+              const authUser: AuthUser = await directGrantAuth(email, password)
+              setUser(authUser)
+              return
+            } catch (directGrantErr) {
+              console.warn(
+                '[useAuth] Direct grant failed, falling back to redirect flow:',
+                directGrantErr
+              )
+              // Fall through to redirect flow if direct grant is not configured
+            }
+          }
+
+          // Fallback: Keycloak redirect flow (hosted login page)
           // The redirectUri was already set in keycloak.init(), so we don't
           // override it here. Keycloak will redirect back to the app root (/)
           // with the callback in the URL fragment. Then keycloak.init() on the
@@ -186,13 +231,29 @@ export function useAuth(): UseAuthReturn {
 
   // ── Logout ──────────────────────────────────────────────────────────────
 
-  const logout = useCallback((): void => {
+  const logout = useCallback(async (): Promise<void> => {
     clearUser()
+    setInitialized(false)  // Reset initialized so user can login fresh
 
     if (!IS_MOCK_AUTH) {
-      void keycloak.logout({ redirectUri: window.location.origin + '/login' })
+      // Clear any cached auth data
+      sessionStorage.clear()
+      localStorage.removeItem('keycloak')
+      
+      // Reset Keycloak instance for fresh login
+      hasStartedInitialization = false
+      
+      try {
+        // This will redirect to Keycloak logout endpoint and then redirect back to /login
+        // Note: This is async but will redirect the page, so execution won't return
+        await revokeToken()
+      } catch (err) {
+        console.warn('[useAuth] Error during token revocation, redirecting to login:', err)
+        // If revocation fails or doesn't redirect, manually go to login
+        window.location.href = '/login'
+      }
     }
-  }, [clearUser])
+  }, [clearUser, setInitialized])
 
   return {
     user,

@@ -17,6 +17,7 @@ export default defineConfig({
       '@portals': resolve(__dirname, 'src/portals'),
       '@store': resolve(__dirname, 'src/store'),
       '@router': resolve(__dirname, 'src/router'),
+      '@assets': resolve(__dirname, 'src/assets'),
     },
   },
 })
