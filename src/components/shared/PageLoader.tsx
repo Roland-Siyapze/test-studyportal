@@ -1,44 +1,65 @@
 /**
- * @file PageLoader.tsx
- * @description Full-page loading indicator shown while lazy route chunks
- *   are being fetched (Suspense fallback).
- *   Also used as a generic loading state across the app.
- *
- *   Satisfies: VIS-003 (loaders present, transitions fluid)
+ * @file PageLoader.tsx  (light theme)
+ * @description Full-page loading indicator — light theme version.
+ *   Satisfies: VIS-003
  */
 
-import { JSX } from "react";
+import type { JSX } from "react";
+import logo from '@assets/logo.png'
 
 export function PageLoader(): JSX.Element {
   return (
     <div
-      className="flex items-center justify-center min-h-screen"
-      style={{ background: 'var(--color-navy)' }}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        background: '#F4F6FA',
+        flexDirection: 'column',
+        gap: 16,
+      }}
       role="status"
       aria-label="Chargement en cours…"
     >
-      <div className="flex flex-col items-center gap-4">
-        {/* Animated BOAZ-STUDY logo mark */}
-        <div className="relative w-12 h-12">
-          <div
-            className="absolute inset-0 rounded-full border-2 border-transparent animate-spin"
-            style={{
-              borderTopColor: 'var(--color-blue-light)',
-              borderRightColor: 'var(--color-gold)',
-            }}
-          />
-          <div
-            className="absolute inset-2 rounded-full"
-            style={{ background: 'var(--color-surface)' }}
-          />
-        </div>
-        <p
-          className="text-sm tracking-widest uppercase animate-pulse-slow"
-          style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-body)' }}
-        >
-          Chargement…
-        </p>
+      {/* Spinner */}
+      <div style={{ position: 'relative', width: 48, height: 48 }}>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: '50%',
+          border: '3px solid transparent',
+          borderTopColor: '#2A4F87',
+          borderRightColor: '#F18F01',
+          animation: 'spin 0.8s linear infinite',
+        }} />
+        <div style={{
+          position: 'absolute',
+          inset: 8,
+          borderRadius: '50%',
+          background: '#F4F6FA',
+        }} />
       </div>
+
+      {/* Logo */}
+      <div style={{ padding: '22px 20px 18px' }}>
+        <img
+          src={logo}
+          alt="Boaz Study"
+          style={{ height: 65, width: 'auto', display: 'flex', margin: 'auto', objectFit: 'contain' }}
+        />
+      </div>
+
+      <p style={{
+        fontFamily: 'Nunito, sans-serif',
+        fontSize: '0.82rem',
+        color: '#94A3B8',
+        letterSpacing: '0.05em',
+      }}>
+        Chargement…
+      </p>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   )
 }
