@@ -29,7 +29,7 @@
 import type { JSX } from 'react'
 import { useState } from 'react'
 import { usePermissions } from '@hooks/usePermissions'
-import { NotificationModal, SignatureModal } from './NotificationModal'
+import { NotificationModal, SignatureModal } from '@components/shared/'
 import { AVIStepper } from './AVIStepper'
 
 // ─────────────────────────────────────────────────────────────────────────────
