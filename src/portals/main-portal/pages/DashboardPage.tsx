@@ -28,6 +28,7 @@ import { TicketsPage } from '../features/tickets/TicketsPage'
 import { DocumentsPage } from '../features/documents/DocumentsPage'
 import { NotificationsPage } from '../features/notifications/NotificationsPage'
 import { AVIPage } from '../features/avi/AVIPage'
+import { FinancementPage } from '../features/financement/FinancementPage'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Service definitions
@@ -335,7 +336,7 @@ const TITLES: Record<string, string> = {
   'mon-agence': 'Mon agence',
   services: 'Services',
   'subscriptions-services': 'Mes souscriptions',
-  'subscriptions-financement': 'Financement',
+  'subscriptions-financement': 'Demande de financement',
   'subscriptions-remboursements': 'Remboursements',
   preuves: 'Preuves de versement',
   'wallet-historiques': 'Mon Wallet Boaz',
@@ -376,24 +377,32 @@ function AccessDenied(): JSX.Element {
 export default function DashboardPage(): JSX.Element {
   const [activePage, setActivePage] = useState<ActivePage>('accueil')
   const [showAVI, setShowAVI] = useState(false)
+  const [showFinancement, setShowFinancement] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   function handleNavigate(page: ActivePage): void {
     setShowAVI(false)
+    setShowFinancement(false)
     setActivePage(page)
   }
 
   function handleSubscribe(service: ServiceDef): void {
     if (service.avi) {
       setShowAVI(true)
+    } else if (service.id === 'financement') {
+      setShowFinancement(true)
     }
   }
 
-  const pageTitle = showAVI ? 'Obtenir mon A.V.I' : (TITLES[activePage] ?? 'Acceuil')
+  const pageTitle = showAVI ? 'Obtenir mon A.V.I' : showFinancement ? 'Demande de financement' : (TITLES[activePage] ?? 'Acceuil')
 
   function renderContent(): JSX.Element {
     if (showAVI) {
       return <AVIPage onBack={() => { setShowAVI(false); setActivePage('accueil') }} />
+    }
+
+    if (showFinancement) {
+      return <FinancementPage initialView="form" />
     }
 
     switch (activePage) {
@@ -409,6 +418,16 @@ export default function DashboardPage(): JSX.Element {
             <DocumentsPage />
           </ProtectedComponent>
         )
+      case 'subscriptions-financement':
+        return (
+          <ProtectedComponent
+            requires="ticket:create"
+            mode="any"
+            fallback={<AccessDenied />}
+          >
+            <FinancementPage />
+          </ProtectedComponent>
+        )  
       case 'notifications':
         return (
           <ProtectedComponent requires="notification:read" fallback={<AccessDenied />}>
@@ -435,7 +454,7 @@ export default function DashboardPage(): JSX.Element {
 
       {/* Sidebar */}
       <Sidebar 
-        activePage={showAVI ? 'services' : activePage} 
+        activePage={showAVI || showFinancement ? 'services' : activePage} 
         onNavigate={handleNavigate}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}

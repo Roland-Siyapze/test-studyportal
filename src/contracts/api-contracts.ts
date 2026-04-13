@@ -139,3 +139,73 @@ export interface PaginationParams {
   size?: number
   sort?: string
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Financement (Financing Requests)
+// ─────────────────────────────────────────────────────────────────────────────
+ 
+export type FinancementStatut =
+  | 'EN_PREPARATION'
+  | 'EN_ATTENTE_PAIEMENT'
+  | 'PAIEMENT_EN_ATTENTE'
+  | 'EN_COURS'
+  | 'EN_REMBOURSEMENT'
+  | 'CLOTURE'
+  | 'ECHEANCE_PASSEE'
+  | 'REJETE'
+  | 'ACCEPTE'
+ 
+export interface FinancementDemande {
+  id: string
+  nom: string | null
+  sommeFinancement: number           // in XAF
+  pourService: string | null
+  dateDemande: string | null         // ISO date string (YYYY-MM-DD)
+  sommeDejaRembourse: number
+  sommeRestante: number
+  documentAssocie: string | null     // null | 'document' | 'signer'
+  statut: FinancementStatut
+  createdAt: string
+  updatedAt: string
+  authorId: string
+}
+ 
+export interface FinancementEcheance {
+  id: string
+  date: string
+  somme: number
+}
+ 
+export interface CreateFinancementDto {
+  // Step 1 — Personal Info
+  prenom: string
+  nom: string
+  lieuNaissance: string
+  dateNaissance: string
+  adresseComplete: string
+  pays: string
+  ville: string
+  quartier: string
+  telephone: string
+ 
+  // Step 2 — Identity
+  nomPrenomParent1: string
+  telephoneParent1: string
+  lieuResidenceParent1: string
+  nomPrenomParent2: string
+  telephoneParent2: string
+  lieuResidenceParent2: string
+ 
+  // Step 3 — Financing Details
+  serviceAFinancer: string
+  sommeDemandee: number
+  fraisFinancement: number
+  sommeTotaleARembourser: number
+ 
+  // Step 4 — Schedule
+  nombreEcheances: number
+  echeances: FinancementEcheance[]
+ 
+  // Step 5 — Justification
+  justification: string
+}
