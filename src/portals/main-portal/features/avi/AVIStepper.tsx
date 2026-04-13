@@ -1,7 +1,7 @@
 /**
  * @file AVIStepper.tsx
  * @description Reusable stepper/progress indicator for the AVI multi-step flow.
- *   Matches the Figma design:
+ *   Matches the design:
  *     - Completed steps: blue circle with checkmark + blue connecting line
  *     - Current step: filled blue circle with number
  *     - Future steps: empty gray circle with number
@@ -29,7 +29,7 @@ export function AVIStepper({ steps, current }: AVIStepperProps): JSX.Element {
       justifyContent: 'center',
       gap: 0,
       marginBottom: 40,
-      padding: '0 20px',
+      paddingTop: 8,
     }}>
       {steps.map((step, idx) => {
         const isDone = step.number < current
@@ -38,31 +38,30 @@ export function AVIStepper({ steps, current }: AVIStepperProps): JSX.Element {
         return (
           <div key={step.number} style={{ display: 'flex', alignItems: 'flex-start' }}>
             {/* Step node + label */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, minWidth: 80 }}>
               {/* Circle */}
               <div style={{
                 width: 40,
                 height: 40,
                 borderRadius: '50%',
-                background: isDone ? '#2A4F87' : isCurrent ? '#2A4F87' : '#fff',
-                border: isDone || isCurrent ? 'none' : '2px solid #D1D5DB',
+                background: isDone ? '#fff' : isCurrent ? '#2563EB' : '#fff',
+                border: isDone ? '2px solid #2563EB' : isCurrent ? 'none' : '2px solid #D1D5DB',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
-                boxShadow: isCurrent ? '0 4px 12px rgba(42,79,135,0.3)' : 'none',
                 transition: 'all 0.3s ease',
               }}>
                 {isDone ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="3">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                 ) : (
                   <span style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 700,
-                    fontSize: '0.85rem',
-                    color: isCurrent ? '#fff' : '#9CA3AF',
+                    fontSize: '0.88rem',
+                    color: isCurrent ? '#fff' : '#94A3B8',
                   }}>
                     {String(step.number).padStart(2, '0')}
                   </span>
@@ -70,28 +69,27 @@ export function AVIStepper({ steps, current }: AVIStepperProps): JSX.Element {
               </div>
 
               {/* Label */}
-              <div style={{ textAlign: 'center', maxWidth: 120 }}>
-                <p style={{
-                  fontSize: '0.75rem',
-                  fontWeight: isCurrent ? 700 : isDone ? 500 : 400,
-                  color: isCurrent ? '#2A4F87' : isDone ? '#374151' : '#9CA3AF',
-                  fontFamily: 'var(--font-body)',
-                  lineHeight: 1.3,
-                  whiteSpace: 'pre-line',
-                }}>
-                  {step.label}
-                  {step.sublabel && `\n${step.sublabel}`}
-                </p>
-              </div>
+              <p style={{
+                fontSize: '0.72rem',
+                fontWeight: isCurrent ? 700 : isDone ? 600 : 400,
+                color: isCurrent ? '#2563EB' : isDone ? '#374151' : '#94A3B8',
+                fontFamily: 'var(--font-body)',
+                lineHeight: 1.3,
+                textAlign: 'center',
+                maxWidth: 90,
+              }}>
+                {step.label}
+                {step.sublabel && `\n${step.sublabel}`}
+              </p>
             </div>
 
             {/* Connector line — between steps only */}
             {idx < steps.length - 1 && (
               <div style={{
+                width: 80,
                 height: 2,
-                width: 60,
-                background: step.number < current ? '#2A4F87' : '#E5E9F2',
-                marginTop: 19, // vertically center with circles
+                background: step.number < current ? '#2563EB' : '#E5E9F2',
+                marginTop: 19,
                 flexShrink: 0,
                 transition: 'background 0.3s ease',
               }} />
