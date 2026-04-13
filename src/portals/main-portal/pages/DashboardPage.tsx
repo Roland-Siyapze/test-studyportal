@@ -258,8 +258,9 @@ function AccueilContent({ onSubscribe }: { onSubscribe: (s: ServiceDef) => void 
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: 20,
-            maxWidth: 760,
+            margin: '0 auto',
+            gap: 30,
+            width: '70%',
           }}>
             {available.map(service => (
               <ProtectedComponent
