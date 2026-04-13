@@ -124,6 +124,8 @@ export type ActivePage =
 interface SidebarProps {
   activePage: ActivePage
   onNavigate: (page: ActivePage) => void
+  isOpen?: boolean
+  onClose?: () => void
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -240,13 +242,16 @@ function Expandable({
 // Main
 // ─────────────────────────────────────────────────────────────────────────────
 
-export function Sidebar({ activePage, onNavigate }: SidebarProps): JSX.Element {
+export function Sidebar({ activePage, onNavigate, isOpen, onClose }: SidebarProps): JSX.Element {
   const { user, logout } = useAuth()
   const [suscOpen, setSuscOpen] = useState(activePage.startsWith('subscriptions'))
   const [walletOpen, setWalletOpen] = useState(activePage === 'wallet-historiques')
   const [agenceOpen, setAgenceOpen] = useState(false)
 
-  const go = (page: ActivePage) => () => { onNavigate(page); }
+  const go = (page: ActivePage) => () => { 
+    onNavigate(page)
+    if (onClose) onClose()
+  }
 
   return (
     /* Gray outer shell — same color as page background so card appears to float */
@@ -256,11 +261,11 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps): JSX.Element {
       top: 0,
       left: 0,
       bottom: 0,
-      zIndex: 40,
+      zIndex: 50,
       padding: '14px 10px',
       background: '#EEF0F5',
       boxSizing: 'border-box',
-    }}>
+    }} className={`sidebar-container ${isOpen ? 'active' : ''}`}>
       {/* White floating card */}
       <div style={{
         background: '#FFFFFF',

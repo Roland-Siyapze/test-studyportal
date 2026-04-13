@@ -255,11 +255,11 @@ function AccueilContent({ onSubscribe }: { onSubscribe: (s: ServiceDef) => void 
 
         {/* 2-column grid of service cards */}
         {available.length > 0 ? (
-          <div style={{
+          <div className="services-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
             margin: '0 auto',
-            gap: 30,
+            gap: 20,
             width: '70%',
           }}>
             {available.map(service => (
@@ -376,6 +376,7 @@ function AccessDenied(): JSX.Element {
 export default function DashboardPage(): JSX.Element {
   const [activePage, setActivePage] = useState<ActivePage>('accueil')
   const [showAVI, setShowAVI] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   function handleNavigate(page: ActivePage): void {
     setShowAVI(false)
@@ -386,7 +387,6 @@ export default function DashboardPage(): JSX.Element {
     if (service.avi) {
       setShowAVI(true)
     }
-    // Other services could route elsewhere
   }
 
   const pageTitle = showAVI ? 'Obtenir mon A.V.I' : (TITLES[activePage] ?? 'Acceuil')
@@ -427,12 +427,29 @@ export default function DashboardPage(): JSX.Element {
       background: '#EEF0F5',
       fontFamily: 'var(--font-body)',
     }}>
-      {/* Sidebar */}
-      <Sidebar activePage={showAVI ? 'services' : activePage} onNavigate={handleNavigate} />
+      {/* Sidebar Overlay */}
+      <div 
+        className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+      />
 
-      {/* Main area — offset by sidebar width */}
-      <div style={{ marginLeft: 260, flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <TopBar pageTitle={pageTitle} />
+      {/* Sidebar */}
+      <Sidebar 
+        activePage={showAVI ? 'services' : activePage} 
+        onNavigate={handleNavigate}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
+      {/* Main area — offset by sidebar width on desktop */}
+      <div style={{ 
+        marginLeft: 260, 
+        flex: 1, 
+        display: 'flex', 
+        flexDirection: 'column', 
+        minHeight: '100vh',
+      }} className="main-content">
+        <TopBar pageTitle={pageTitle} onMenuClick={() => setSidebarOpen(true)} />
 
         {/* Page content — with gray padding so cards appear floating */}
         <main style={{

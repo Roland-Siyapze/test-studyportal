@@ -15,12 +15,12 @@ export interface StepListViewProps {
 
 export function StepListView({ steps, onStart, onStepSelect, canEdit }: StepListViewProps): JSX.Element {
   return (
-    <div style={{ padding: '32px 40px', animation: 'fadeIn 0.3s ease' }}>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.35rem', color: '#1A2332', textAlign: 'center', marginBottom: 28 }}>
+    <div style={{ padding: '20px 16px', animation: 'fadeIn 0.3s ease' }}>
+      <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.1rem', color: '#1A2332', textAlign: 'center', marginBottom: 20 }}>
         Parcours à suivre
       </h2>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 600, margin: '0 auto' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
         {steps.map((step) => {
           const isCurrent = step.status === 'current'
           const isDone = step.status === 'done'
@@ -30,8 +30,8 @@ export function StepListView({ steps, onStart, onStepSelect, canEdit }: StepList
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 14,
-                padding: '14px 18px',
+                gap: 10,
+                padding: '12px 14px',
                 borderRadius: isCurrent ? '12px 12px 0 0' : 12,
                 background: isCurrent ? '#EBF0FA' : '#fff',
                 border: `1px solid ${isCurrent ? '#2A4F87' : isDone ? '#86EFAC' : '#E5E9F2'}`,
@@ -40,8 +40,8 @@ export function StepListView({ steps, onStart, onStepSelect, canEdit }: StepList
                 transition: 'all 0.15s',
               }}>
                 <div style={{
-                  width: 40,
-                  height: 40,
+                  width: 32,
+                  height: 32,
                   borderRadius: '50%',
                   background: isDone ? '#428959' : isCurrent ? '#2A4F87' : '#fff',
                   border: isDone || isCurrent ? 'none' : '2px solid #E5E9F2',
@@ -50,43 +50,40 @@ export function StepListView({ steps, onStart, onStepSelect, canEdit }: StepList
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: 700,
-                  fontSize: '0.82rem',
+                  fontSize: '0.75rem',
                   fontFamily: 'var(--font-display)',
                   flexShrink: 0,
                 }}>
                   {isDone ? '✓' : String(step.number).padStart(2, '0')}
                 </div>
 
-                <p style={{ flex: 1, fontWeight: isCurrent ? 700 : 500, fontSize: '0.92rem', color: isCurrent ? '#2A4F87' : '#374151', fontFamily: 'var(--font-body)' }}>
+                <p style={{ flex: 1, fontWeight: isCurrent ? 700 : 500, fontSize: '0.85rem', color: isCurrent ? '#2A4F87' : '#374151', fontFamily: 'var(--font-body)' }}>
                   {step.title}
                 </p>
 
                 <button
                   onClick={() => { onStepSelect(step.number) }}
                   style={{
-                    padding: '7px 14px',
+                    padding: '6px 10px',
                     borderRadius: 8,
                     border: isCurrent ? 'none' : '1.5px solid #E5E9F2',
                     background: isCurrent ? '#2A4F87' : '#fff',
                     color: isCurrent ? '#fff' : '#64748B',
                     fontWeight: 600,
-                    fontSize: '0.78rem',
+                    fontSize: '0.7rem',
                     cursor: 'pointer',
                     fontFamily: 'var(--font-body)',
                     flexShrink: 0,
+                    whiteSpace: 'nowrap',
                   }}
                 >
-                  {isCurrent ? 'Revenir' : step.number === 10 ? 'Déposer la preuve' : "Aller à l'étape"}
+                  {isCurrent ? 'Revenir' : step.number === 10 ? 'Déposer' : "Aller à l'étape"}
                 </button>
-
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2">
-                  <polyline points="6 9 12 15 18 9"/>
-                </svg>
               </div>
 
               {isCurrent && (
-                <div style={{ padding: '12px 18px', background: '#EBF0FA', border: '1px solid #2A4F87', borderTop: 'none', borderRadius: '0 0 12px 12px', animation: 'fadeIn 0.2s ease' }}>
-                  <p style={{ fontSize: '0.82rem', color: '#64748B', fontFamily: 'var(--font-body)', fontStyle: 'italic' }}>
+                <div style={{ padding: '10px 14px', background: '#EBF0FA', border: '1px solid #2A4F87', borderTop: 'none', borderRadius: '0 0 12px 12px', animation: 'fadeIn 0.2s ease' }}>
+                  <p style={{ fontSize: '0.75rem', color: '#64748B', fontFamily: 'var(--font-body)', fontStyle: 'italic' }}>
                     Ici, veuillez remplir vos informations personnelles
                   </p>
                 </div>
@@ -96,8 +93,8 @@ export function StepListView({ steps, onStart, onStepSelect, canEdit }: StepList
         })}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 32, maxWidth: 600, margin: '32px auto 0' }}>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 20px', borderRadius: 10, border: '1.5px solid #E5E9F2', background: '#fff', color: '#374151', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24 }}>
+        <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '12px 20px', borderRadius: 10, border: '1.5px solid #E5E9F2', background: '#fff', color: '#374151', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'var(--font-body)', width: '100%' }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
@@ -107,7 +104,7 @@ export function StepListView({ steps, onStart, onStepSelect, canEdit }: StepList
         </button>
 
         {canEdit && (
-          <button onClick={onStart} style={{ padding: '12px 32px', borderRadius: 10, border: 'none', background: '#2A4F87', color: '#fff', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', fontFamily: 'var(--font-body)', boxShadow: '0 4px 14px rgba(42,79,135,0.35)' }}>
+          <button onClick={onStart} style={{ padding: '14px 32px', borderRadius: 10, border: 'none', background: '#2A4F87', color: '#fff', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', fontFamily: 'var(--font-body)', boxShadow: '0 4px 14px rgba(42,79,135,0.35)', width: '100%' }}>
             Commencer
           </button>
         )}

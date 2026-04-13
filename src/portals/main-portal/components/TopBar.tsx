@@ -13,16 +13,17 @@ import { usePermissions } from '@hooks/usePermissions'
 
 interface TopBarProps {
   pageTitle: string
+  onMenuClick?: () => void
 }
 
-export function TopBar({ pageTitle }: TopBarProps): JSX.Element {
+export function TopBar({ pageTitle, onMenuClick }: TopBarProps): JSX.Element {
   const { user } = useAuth()
   const { hasPermission } = usePermissions()
   const isAdmin = hasPermission('admin:access')
 
   return (
     /* Gray strip that provides the outer gap */
-    <div style={{
+    <div className="topbar-container" style={{
       background: '#EEF0F5',
       padding: '14px 14px 0',
       position: 'sticky',
@@ -30,7 +31,7 @@ export function TopBar({ pageTitle }: TopBarProps): JSX.Element {
       zIndex: 30,
     }}>
       {/* White floating pill */}
-      <div style={{
+      <div className="topbar-content" style={{
         background: '#FFFFFF',
         borderRadius: 16,
         padding: '0 24px',
@@ -42,22 +43,36 @@ export function TopBar({ pageTitle }: TopBarProps): JSX.Element {
       }}>
 
         {/* Page title — bold blue, matches Figma "Acceuil" style */}
-        <h1 style={{
-          fontFamily: 'var(--font-display)',
-          fontWeight: 700,
-          fontSize: '1.45rem',
-          color: '#2563EB',
-          margin: 0,
-          letterSpacing: '-0.01em',
-        }}>
-          {pageTitle}
-        </h1>
+        <div className="topbar-left" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {onMenuClick && (
+            <button 
+              onClick={onMenuClick}
+              className="mobile-nav-toggle in-topbar"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2">
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            </button>
+          )}
+          <h1 className="topbar-title" style={{
+            fontFamily: 'var(--font-display)',
+            fontWeight: 700,
+            fontSize: '1.45rem',
+            color: '#2563EB',
+            margin: 0,
+            letterSpacing: '-0.01em',
+          }}>
+            {pageTitle}
+          </h1>
+        </div>
 
         {/* Right controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div className="topbar-right" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
 
           {/* Mon organisation */}
-          <button style={{
+          <button className="org-btn" style={{
             display: 'flex',
             alignItems: 'center',
             gap: 8,
@@ -80,14 +95,14 @@ export function TopBar({ pageTitle }: TopBarProps): JSX.Element {
               <rect x="2" y="7" width="20" height="14" rx="2"/>
               <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
             </svg>
-            Mon organisation
+            <span className="org-label">Mon organisation</span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2.5">
               <polyline points="6 9 12 15 18 9"/>
             </svg>
           </button>
 
           {/* User pill — avatar + name + role + chevron */}
-          <button style={{
+          <button className="user-btn" style={{
             display: 'flex',
             alignItems: 'center',
             gap: 10,
@@ -122,7 +137,7 @@ export function TopBar({ pageTitle }: TopBarProps): JSX.Element {
             </div>
 
             {/* Name + role */}
-            <div style={{ textAlign: 'left' }}>
+            <div className="user-info" style={{ textAlign: 'left' }}>
               <p style={{
                 fontWeight: 700,
                 fontSize: '0.84rem',
