@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
+ 
 import type { JSX } from 'react'
 import { ProtectedComponent } from '@components/ProtectedComponent'
 import type { Document, DocumentCategory } from '@contracts/api-contracts'

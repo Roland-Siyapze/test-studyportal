@@ -27,6 +27,7 @@ import type { Permission } from '@contracts/api-contracts'
 import { TicketsPage } from '../features/tickets/TicketsPage'
 import { DocumentsPage } from '../features/documents/DocumentsPage'
 import { NotificationsPage } from '../features/notifications/NotificationsPage'
+import { ProfilePage } from '../features/profile/ProfilePage'
 import { AVIPage } from '../features/avi/AVIPage'
 import { FinancementPage } from '../features/financement/FinancementPage'
 import { LogementPage } from '../features/logement/LogementPage'
@@ -347,6 +348,7 @@ const TITLES: Record<string, string> = {
   tickets: 'Mes Tickets',
   documents: 'Documents',
   notifications: 'Notifications',
+  profile: 'Mon Profil',
   avi: 'Obtenir mon A.V.I',
 }
 
@@ -439,6 +441,8 @@ export default function DashboardPage(): JSX.Element {
             <NotificationsPage />
           </ProtectedComponent>
         )
+      case 'profile':
+        return <ProfilePage />
       default:
         return <AccueilContent onSubscribe={handleSubscribe} />
     }

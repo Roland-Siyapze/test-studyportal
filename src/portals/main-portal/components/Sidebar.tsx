@@ -131,6 +131,7 @@ export type ActivePage =
   | 'tickets'
   | 'documents'
   | 'notifications'
+  | 'profile'
 
 interface SidebarProps {
   activePage: ActivePage
@@ -258,6 +259,8 @@ export function Sidebar({ activePage, onNavigate, isOpen, onClose }: SidebarProp
             <NavBtn label="Mes documents" icon={Icon.file} active={activePage === 'documents'} onClick={go('documents')} />
           </ProtectedComponent>
 
+          <NavBtn label="Paramètres de profil" icon={Icon.settings} active={activePage === 'profile'} onClick={go('profile')} />
+
           <ProtectedComponent requires="admin:access">
             <NavBtn label="Paramètres" icon={Icon.settings} active={activePage === 'parametres'} onClick={go('parametres')} />
           </ProtectedComponent>
@@ -268,7 +271,13 @@ export function Sidebar({ activePage, onNavigate, isOpen, onClose }: SidebarProp
           <div style={{
             display: 'flex', alignItems: 'center', gap: 10,
             padding: '10px 12px', borderRadius: 12, background: '#F8F9FD', marginBottom: 8,
-          }}>
+            cursor: 'pointer',
+            transition: 'background 0.12s',
+          }}
+          onClick={go('profile')}
+          onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = '#EEF0F8' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = '#F8F9FD' }}
+          >
             <div style={{
               width: 34, height: 34, borderRadius: '50%',
               background: 'linear-gradient(135deg, #F18F01, #2A4F87)',
@@ -285,6 +294,9 @@ export function Sidebar({ activePage, onNavigate, isOpen, onClose }: SidebarProp
               <p style={{ fontSize: '0.7rem', color: '#94A3B8', fontFamily: 'var(--font-body)', lineHeight: 1.2 }}>
                 {user?.email ?? ''}
               </p>
+            </div>
+            <div style={{ color: activePage === 'profile' ? '#2563EB' : '#94A3B8', opacity: activePage === 'profile' ? 1 : 0.7 }}>
+              {Icon.settings}
             </div>
           </div>
           <button

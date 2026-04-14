@@ -21,10 +21,11 @@ export function DocumentsPage(): JSX.Element {
   const [docs, setDocs] = useState([...MOCK_DOCUMENTS])
   const [showUpload, setShowUpload] = useState(false)
   const [filterCat, setFilterCat] = useState<DocumentCategory | 'ALL'>('ALL')
-  const [view, setView] = useState<DocumentsView>('list')
+  const [view] = useState<DocumentsView>('list')
 
   function handleUpload(name: string, category: DocumentCategory): void {
     const newDoc: Document = {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       id: `doc-${Date.now()}`,
       name,
       category,

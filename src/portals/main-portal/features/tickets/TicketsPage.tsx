@@ -414,7 +414,6 @@ export function TicketsPage(): JSX.Element {
                   marginBottom: 14,
                   fontFamily: 'var(--font-body)',
                   margin: 0,
-                  marginBottom: 14,
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical',
@@ -520,7 +519,7 @@ export function TicketsPage(): JSX.Element {
             }}>
               {filter === 'ALL'
                 ? 'Vous n\'avez pas encore de ticket. Créez-en un pour démarrer.'
-                : `Aucun ticket avec le statut "${STATUS_CONFIG[filter as TicketStatus].label}"`}
+                : `Aucun ticket avec le statut "${STATUS_CONFIG[filter].label}"`}
             </p>
             {filter !== 'ALL' && (
               <button
