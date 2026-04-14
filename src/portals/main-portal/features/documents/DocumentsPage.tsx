@@ -205,7 +205,7 @@ export function DocumentsPage(): JSX.Element {
           return (
             <button
               key={cat}
-              onClick={() => { setFilterCat(cat); }}
+              onClick={() => { setFilterCat(cat as DocumentCategory | 'ALL'); }}
               style={{
                 padding: '6px 14px', borderRadius: 999, fontSize: '0.8rem',
                 fontWeight: active ? 700 : 500,

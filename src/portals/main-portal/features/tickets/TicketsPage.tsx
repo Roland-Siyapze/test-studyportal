@@ -257,7 +257,7 @@ function TicketDetail({ ticket, onClose }: { ticket: Ticket; onClose: () => void
 
 export function TicketsPage(): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { hasPermission } = usePermissions()
+  const { hasPermission: _hasPermission } = usePermissions()
   const [tickets, setTickets] = useState([...MOCK_TICKETS])
   const [showCreate, setShowCreate] = useState(false)
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null)
