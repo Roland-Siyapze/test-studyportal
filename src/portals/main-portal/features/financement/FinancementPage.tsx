@@ -45,7 +45,9 @@ export interface FormData {
   scanPasseportName: string
   planLocalisationName: string
   scanCNIName: string
+  scanCNIFile: File | null
   demiCartePhotoName: string
+  demiCartePhotoFile: File | null
   nomPrenomParent1: string
   telephoneParent1: string
   lieuResidenceParent1: string
@@ -77,7 +79,9 @@ const INITIAL_FORM: FormData = {
   scanPasseportName: '',
   planLocalisationName: '',
   scanCNIName: '',
+  scanCNIFile: null,
   demiCartePhotoName: '',
+  demiCartePhotoFile: null,
   nomPrenomParent1: '',
   telephoneParent1: '',
   lieuResidenceParent1: '',
@@ -109,7 +113,7 @@ export function FinancementPage({ initialView = 'list' }: { initialView?: 'list'
   const [form, setForm] = useState<FormData>({ ...INITIAL_FORM })
   const [demandes, setDemandes] = useState([...MOCK_FINANCEMENT_DEMANDES])
 
-  const handleChange = useCallback((key: keyof FormData, value: string) => {
+  const handleChange = useCallback((key: keyof FormData, value: string | File | null) => {
     setForm(prev => ({ ...prev, [key]: value }))
   }, [])
 

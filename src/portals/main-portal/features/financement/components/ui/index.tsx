@@ -71,14 +71,14 @@ export function InputField({
   )
 }
 
-export function FilePickerField({ label, fileName, onPick }: { label: string; fileName: string; onPick: (name: string) => void }): JSX.Element {
+export function FilePickerField({ label, fileName, onPick }: { label: string; fileName: string; onPick: (name: string, file?: File) => void }): JSX.Element {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
       <button
         onClick={() => {
           const i = document.createElement('input')
           i.type = 'file'
-          i.onchange = (e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (f) onPick(f.name) }
+          i.onchange = (e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (f) onPick(f.name, f) }
           i.click()
         }}
         style={{
