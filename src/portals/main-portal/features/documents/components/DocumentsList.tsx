@@ -10,16 +10,6 @@ const CATEGORY_CONFIG: Record<DocumentCategory, { label: string; icon: string; c
   OTHER:       { label: 'Autre',               icon: '📄', color: '#64748B', bg: '#F1F5F9' },
 }
 
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
-  return `${(bytes / 1024 / 1024).toFixed(1)} MB`
-}
-
-function formatDate(iso: string): string {
-  return new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso))
-}
-
 export interface DocumentsListProps {
   docs: Document[]
   filterCat: DocumentCategory | 'ALL'
@@ -55,84 +45,225 @@ export function DocumentsList({ docs, filterCat, onFilterChange }: DocumentsList
         })}
       </div>
 
-      {/* Document list */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {filtered.map(doc => {
-          const cfg = CATEGORY_CONFIG[doc.category]
-          return (
-            <div key={doc.id} style={{
-              background: '#fff',
-              borderRadius: 14,
-              border: '1px solid #E5E9F2',
-              padding: '16px 20px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 16,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-              transition: 'box-shadow 0.15s',
+      {/* Document cards grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
+        {filtered.map(doc => (
+          <ProtectedComponent key={doc.id} requires="document:download" fallback={<DocumentCardLocked doc={doc} />}>
+            <DocumentCard doc={doc} />
+          </ProtectedComponent>
+        ))}
+      </div>
+
+      {filtered.length === 0 && (
+        <div style={{ background: '#fff', borderRadius: 14, border: '1px dashed #E5E9F2', padding: 40, textAlign: 'center' }}>
+          <p style={{ color: '#94A3B8', fontFamily: 'var(--font-body)' }}>Aucun document trouvé</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function DocumentCard({ doc }: { doc: Document }): JSX.Element {
+  return (
+    <div
+      onClick={() => { window.open(doc.downloadUrl, '_blank') }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 14,
+        overflow: 'hidden',
+        boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 6px 20px rgba(37, 99, 235, 0.3)';
+        (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)';
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.2)';
+        (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
+      }}
+    >
+      {/* Document Preview */}
+      <div style={{
+        background: '#F5F5F5',
+        height: 200,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {doc.previewUrl ? (
+          <img
+            src={doc.previewUrl}
+            alt={doc.name}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 16px rgba(42,79,135,0.1)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)' }}
-            >
-              {/* File icon */}
-              <div style={{
-                width: 48, height: 48, borderRadius: 12,
-                background: cfg.bg,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.4rem', flexShrink: 0,
-              }}>
-                {cfg.icon}
-              </div>
-
-              {/* Info */}
-              <div style={{ flex: 1, overflow: 'hidden' }}>
-                <p style={{ fontWeight: 700, fontSize: '0.92rem', color: '#1A2332', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontFamily: 'var(--font-display)' }}>
-                  {doc.name}
-                </p>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 4 }}>
-                  <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: '0.7rem', fontWeight: 700, background: cfg.bg, color: cfg.color }}>{cfg.label}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>{formatSize(doc.size)}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#CBD5E1' }}>·</span>
-                  <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>{formatDate(doc.uploadedAt)}</span>
-                </div>
-              </div>
-
-              {/* Download button */}
-              <ProtectedComponent requires="document:download">
-                <a
-                  href={doc.downloadUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 6,
-                    padding: '8px 16px', borderRadius: 8,
-                    border: '1.5px solid #E5E9F2',
-                    background: '#F8FAFC',
-                    color: '#2A4F87',
-                    fontWeight: 600,
-                    fontSize: '0.8rem',
-                    textDecoration: 'none',
-                    flexShrink: 0,
-                    transition: 'all 0.15s',
-                    fontFamily: 'var(--font-body)',
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#EBF0FA'; (e.currentTarget as HTMLAnchorElement).style.borderColor = '#2A4F87' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#F8FAFC'; (e.currentTarget as HTMLAnchorElement).style.borderColor = '#E5E9F2' }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  Télécharger
-                </a>
-              </ProtectedComponent>
-            </div>
-          )
-        })}
-
-        {filtered.length === 0 && (
-          <div style={{ background: '#fff', borderRadius: 14, border: '1px dashed #E5E9F2', padding: 40, textAlign: 'center' }}>
-            <p style={{ color: '#94A3B8', fontFamily: 'var(--font-body)' }}>Aucun document trouvé</p>
+          />
+        ) : (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '4rem',
+            color: '#CBD5E1',
+          }}>
+            📄
           </div>
         )}
       </div>
+
+      {/* Blue Banner */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 16,
+          padding: '16px 20px',
+          background: '#2563EB',
+          color: '#FFFFFF',
+        }}
+      >
+        {/* Icons container */}
+        <div style={{ display: 'flex', gap: 12, flexShrink: 0 }}>
+          {/* Download icon */}
+          <div style={{
+            width: 40,
+            height: 40,
+            borderRadius: 10,
+            background: 'rgba(255, 255, 255, 0.25)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1.5px solid rgba(255, 255, 255, 0.4)',
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+
+          {/* View icon */}
+          <div style={{
+            width: 40,
+            height: 40,
+            borderRadius: 10,
+            background: 'rgba(255, 255, 255, 0.25)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1.5px solid rgba(255, 255, 255, 0.4)',
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+        </div>
+
+        {/* File name - centered */}
+        <div style={{ flex: 1, textAlign: 'center', minWidth: 0 }}>
+          <p style={{
+            fontWeight: 700,
+            fontSize: '0.9rem',
+            color: '#FFFFFF',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            fontFamily: 'var(--font-display)',
+            margin: 0,
+            letterSpacing: '0.3px',
+          }}>
+            {doc.name}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DocumentCardLocked({ doc }: { doc: Document }): JSX.Element {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        padding: '16px 20px',
+        borderRadius: 12,
+        background: '#CBD5E1',
+        color: '#FFFFFF',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      }}
+    >
+      {/* Icons container */}
+      <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
+        {/* Download icon (disabled) */}
+        <div style={{
+          width: 40,
+          height: 40,
+          borderRadius: 8,
+          background: 'rgba(255, 255, 255, 0.2)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: '1.5px solid rgba(255, 255, 255, 0.3)',
+          opacity: 0.5,
+        }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </div>
+
+        {/* View icon (disabled) */}
+        <div style={{
+          width: 40,
+          height: 40,
+          borderRadius: 8,
+          background: 'rgba(255, 255, 255, 0.2)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: '1.5px solid rgba(255, 255, 255, 0.3)',
+          opacity: 0.5,
+        }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+      </div>
+
+      {/* File name */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p style={{
+          fontWeight: 700,
+          fontSize: '0.95rem',
+          color: '#FFFFFF',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          fontFamily: 'var(--font-display)',
+          margin: 0,
+        }}>
+          {doc.name}
+        </p>
+      </div>
+
+      {/* Lock icon */}
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ flexShrink: 0 }}>
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
     </div>
   )
 }

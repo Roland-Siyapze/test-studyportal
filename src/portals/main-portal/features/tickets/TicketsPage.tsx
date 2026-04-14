@@ -339,7 +339,7 @@ export function TicketsPage(): JSX.Element {
       </div>
 
       {/* Ticket list */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 16 }}>
         {filtered.map(ticket => {
           const st = STATUS_CONFIG[ticket.status]
           const pr = PRIORITY_CONFIG[ticket.priority]
@@ -350,57 +350,196 @@ export function TicketsPage(): JSX.Element {
               style={{
                 background: '#fff',
                 borderRadius: 14,
-                border: '1px solid #E5E9F2',
-                padding: '16px 20px',
+                border: '1.5px solid #E5E9F2',
+                overflow: 'hidden',
                 cursor: 'pointer',
-                transition: 'box-shadow 0.15s, transform 0.15s',
+                transition: 'all 0.2s ease',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                display: 'flex',
+                flexDirection: 'column',
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 6px 20px rgba(42,79,135,0.1)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-1px)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; (e.currentTarget as HTMLDivElement).style.transform = 'none' }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 24px rgba(42,79,135,0.15)';
+                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
+              }}
             >
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.95rem', color: '#1A2332', marginBottom: 6 }}>
+              {/* Priority indicator bar */}
+              <div style={{
+                height: 4,
+                background: pr.color,
+              }} />
+
+              {/* Card content */}
+              <div style={{ padding: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 12 }}>
+                  <h3 style={{
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 700,
+                    fontSize: '1rem',
+                    color: '#1A2332',
+                    margin: 0,
+                    flex: 1,
+                    lineHeight: 1.4,
+                  }}>
                     {ticket.title}
                   </h3>
-                  <p style={{ fontSize: '0.82rem', color: '#64748B', lineHeight: 1.4, marginBottom: 10 }}>
-                    {ticket.description.substring(0, 100)}{ticket.description.length > 100 ? '…' : ''}
-                  </p>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                    <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: '0.72rem', fontWeight: 700, background: st.bg, color: st.color }}>
-                      {st.label}
-                    </span>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 700, color: pr.color }}>
-                      Priorité {pr.label}
-                    </span>
-                    <span style={{ fontSize: '0.72rem', color: '#CBD5E1' }}>·</span>
-                    <span style={{ fontSize: '0.72rem', color: '#94A3B8' }}>{formatDate(ticket.createdAt)}</span>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
                   {ticket.comments.length > 0 && (
-                    <span style={{ fontSize: '0.75rem', color: '#94A3B8', display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span style={{
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      background: '#F0F2F7',
+                      color: '#64748B',
+                      padding: '4px 10px',
+                      borderRadius: 999,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      flexShrink: 0,
+                    }}>
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                       {ticket.comments.length}
                     </span>
                   )}
-                  <ProtectedComponent requires="ticket:update">
-                    <button
-                      onClick={e => { e.stopPropagation(); setSelectedTicket(ticket) }}
-                      style={{ padding: '5px 12px', borderRadius: 8, border: '1.5px solid #E5E9F2', background: '#F8FAFC', color: '#2A4F87', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}
-                    >
-                      Modifier
-                    </button>
-                  </ProtectedComponent>
                 </div>
+
+                {/* Description preview */}
+                <p style={{
+                  fontSize: '0.85rem',
+                  color: '#64748B',
+                  lineHeight: 1.5,
+                  marginBottom: 14,
+                  fontFamily: 'var(--font-body)',
+                  margin: 0,
+                  marginBottom: 14,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}>
+                  {ticket.description}
+                </p>
+
+                {/* Metadata - Status, Priority, Date */}
+                <div style={{
+                  display: 'flex',
+                  gap: 8,
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  paddingTop: 12,
+                  borderTop: '1px solid #F0F2F7',
+                }}>
+                  <span style={{
+                    padding: '4px 10px',
+                    borderRadius: 6,
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    background: st.bg,
+                    color: st.color,
+                  }}>
+                    {st.label}
+                  </span>
+                  <span style={{
+                    padding: '4px 10px',
+                    borderRadius: 6,
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    background: '#F8FAFC',
+                    color: pr.color,
+                  }}>
+                    {pr.label}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: '#CBD5E1' }}>·</span>
+                  <span style={{ fontSize: '0.72rem', color: '#94A3B8', fontFamily: 'var(--font-body)' }}>
+                    {formatDate(ticket.createdAt)}
+                  </span>
+                </div>
+
+                {/* Action - View/Edit button */}
+                <ProtectedComponent requires="ticket:update">
+                  <button
+                    onClick={e => { e.stopPropagation(); setSelectedTicket(ticket) }}
+                    style={{
+                      width: '100%',
+                      marginTop: 14,
+                      padding: '10px 14px',
+                      borderRadius: 8,
+                      border: '1.5px solid #E5E9F2',
+                      background: '#F8FAFC',
+                      color: '#2A4F87',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-body)',
+                      transition: 'all 0.15s',
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = '#EBF0FA';
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = '#2A4F87';
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = '#F8FAFC';
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = '#E5E9F2';
+                    }}
+                  >
+                    Voir les détails
+                  </button>
+                </ProtectedComponent>
               </div>
             </div>
           )
         })}
         {filtered.length === 0 && (
-          <div style={{ background: '#fff', borderRadius: 14, border: '1px dashed #E5E9F2', padding: 40, textAlign: 'center' }}>
-            <p style={{ color: '#94A3B8', fontFamily: 'var(--font-body)' }}>Aucun ticket trouvé</p>
+          <div style={{
+            gridColumn: '1 / -1',
+            background: '#fff',
+            borderRadius: 14,
+            border: '1px dashed #E5E9F2',
+            padding: '60px 40px',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '3.5rem', marginBottom: 16 }}>🎫</div>
+            <p style={{
+              fontWeight: 700,
+              fontSize: '1.1rem',
+              color: '#1A2332',
+              fontFamily: 'var(--font-display)',
+              marginBottom: 6,
+            }}>
+              Aucun ticket trouvé
+            </p>
+            <p style={{
+              fontSize: '0.85rem',
+              color: '#94A3B8',
+              fontFamily: 'var(--font-body)',
+              marginBottom: 20,
+            }}>
+              {filter === 'ALL'
+                ? 'Vous n\'avez pas encore de ticket. Créez-en un pour démarrer.'
+                : `Aucun ticket avec le statut "${STATUS_CONFIG[filter as TicketStatus].label}"`}
+            </p>
+            {filter !== 'ALL' && (
+              <button
+                onClick={() => { setFilter('ALL'); }}
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: 8,
+                  border: '1.5px solid #E5E9F2',
+                  background: '#EBF0FA',
+                  color: '#2A4F87',
+                  fontWeight: 600,
+                  fontSize: '0.82rem',
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-body)',
+                }}
+              >
+                Voir tous les tickets
+              </button>
+            )}
           </div>
         )}
       </div>

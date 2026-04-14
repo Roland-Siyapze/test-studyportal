@@ -65,71 +65,145 @@ export function NotificationsPage(): JSX.Element {
         )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
         {notifications.map(n => {
           const cfg = TYPE_CONFIG[n.type]
           return (
             <div
               key={n.id}
               style={{
-                background: n.read ? '#fff' : '#FAFBFF',
+                background: '#fff',
                 borderRadius: 14,
-                border: `1px solid ${n.read ? '#E5E9F2' : '#D0DCFF'}`,
-                padding: '16px 20px',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: 14,
-                boxShadow: n.read ? '0 2px 8px rgba(0,0,0,0.04)' : '0 2px 12px rgba(42,79,135,0.08)',
-                transition: 'all 0.15s',
+                border: `2px solid ${cfg.bg}`,
+                padding: '20px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                boxShadow: n.read ? '0 2px 8px rgba(0,0,0,0.04)' : `0 4px 16px ${cfg.color}20`,
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+              onClick={() => { markRead(n.id); }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 24px ${cfg.color}30`;
+                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLDivElement).style.boxShadow = n.read ? '0 2px 8px rgba(0,0,0,0.04)' : `0 4px 16px ${cfg.color}20`;
+                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
               }}
             >
+              {/* Unread indicator */}
+              {!n.read && (
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: 3,
+                  background: cfg.color,
+                }} />
+              )}
+
+              {/* Icon + Type Badge */}
               <div style={{
-                width: 42, height: 42, borderRadius: 12,
+                width: 50,
+                height: 50,
+                borderRadius: 12,
                 background: cfg.bg,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.2rem', flexShrink: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.6rem',
+                marginBottom: 12,
               }}>
                 {cfg.icon}
               </div>
 
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <p style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1A2332', fontFamily: 'var(--font-display)' }}>
-                    {n.title}
-                  </p>
-                  {!n.read && (
-                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2A4F87', flexShrink: 0 }} />
-                  )}
-                </div>
-                <p style={{ fontSize: '0.84rem', color: '#64748B', lineHeight: 1.5, marginBottom: 6, fontFamily: 'var(--font-body)' }}>
-                  {n.message}
+              {/* Title + Type label */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                <p style={{
+                  fontWeight: 700,
+                  fontSize: '0.95rem',
+                  color: '#1A2332',
+                  fontFamily: 'var(--font-display)',
+                  margin: 0,
+                }}>
+                  {n.title}
                 </p>
-                <span style={{ fontSize: '0.72rem', color: '#94A3B8' }}>{formatDate(n.createdAt)}</span>
+                <span style={{
+                  padding: '2px 8px',
+                  borderRadius: 999,
+                  fontSize: '0.65rem',
+                  fontWeight: 700,
+                  background: cfg.bg,
+                  color: cfg.color,
+                  flexShrink: 0,
+                }}>
+                  {cfg.label}
+                </span>
               </div>
 
-              {!n.read && (
-                <button
-                  onClick={() => { markRead(n.id); }}
-                  style={{
-                    padding: '6px 12px', borderRadius: 8, border: '1.5px solid #E5E9F2',
-                    background: '#fff', color: '#64748B', fontSize: '0.75rem', fontWeight: 600,
-                    cursor: 'pointer', flexShrink: 0, fontFamily: 'var(--font-body)',
-                  }}
-                >
-                  Lu
-                </button>
-              )}
+              {/* Message */}
+              <p style={{
+                fontSize: '0.85rem',
+                color: '#64748B',
+                lineHeight: 1.6,
+                marginBottom: 12,
+                fontFamily: 'var(--font-body)',
+                margin: 0,
+              }}>
+                {n.message}
+              </p>
+
+              {/* Date + Read status */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingTop: 12,
+                borderTop: '1px solid #EBF0FA',
+              }}>
+                <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontFamily: 'var(--font-body)' }}>
+                  {formatDate(n.createdAt)}
+                </span>
+                {!n.read && (
+                  <span style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    background: cfg.color,
+                    flexShrink: 0,
+                  }} />
+                )}
+              </div>
             </div>
           )
         })}
 
         {notifications.length === 0 && (
-          <div style={{ background: '#fff', borderRadius: 14, border: '1px dashed #E5E9F2', padding: 60, textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem', marginBottom: 12 }}>🔔</div>
-            <p style={{ fontWeight: 600, color: '#64748B', fontFamily: 'var(--font-display)', marginBottom: 4 }}>
+          <div style={{
+            gridColumn: '1 / -1',
+            background: '#fff',
+            borderRadius: 14,
+            border: '1px dashed #E5E9F2',
+            padding: '80px 40px',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '4rem', marginBottom: 16 }}>🔔</div>
+            <p style={{
+              fontWeight: 700,
+              fontSize: '1.15rem',
+              color: '#1A2332',
+              fontFamily: 'var(--font-display)',
+              marginBottom: 6,
+            }}>
               Aucune notification
             </p>
-            <p style={{ fontSize: '0.82rem', color: '#94A3B8', fontFamily: 'var(--font-body)' }}>
+            <p style={{
+              fontSize: '0.85rem',
+              color: '#94A3B8',
+              fontFamily: 'var(--font-body)',
+            }}>
               Vous n'avez pas de notification pour le moment.
             </p>
           </div>
