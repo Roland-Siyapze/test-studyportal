@@ -29,6 +29,7 @@ import { DocumentsPage } from '../features/documents/DocumentsPage'
 import { NotificationsPage } from '../features/notifications/NotificationsPage'
 import { AVIPage } from '../features/avi/AVIPage'
 import { FinancementPage } from '../features/financement/FinancementPage'
+import { LogementPage } from '../features/logement/LogementPage'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Service definitions
@@ -377,11 +378,13 @@ function AccessDenied(): JSX.Element {
 export default function DashboardPage(): JSX.Element {
   const [activePage, setActivePage] = useState<ActivePage>('accueil')
   const [showAVI, setShowAVI] = useState(false)
+  const [showLogement, setShowLogement] = useState(false)
   const [showFinancement, setShowFinancement] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   function handleNavigate(page: ActivePage): void {
     setShowAVI(false)
+    setShowLogement(false)
     setShowFinancement(false)
     setActivePage(page)
   }
@@ -389,16 +392,22 @@ export default function DashboardPage(): JSX.Element {
   function handleSubscribe(service: ServiceDef): void {
     if (service.avi) {
       setShowAVI(true)
+    } else if (service.id === 'logement') {
+      setShowLogement(true)
     } else if (service.id === 'financement') {
       setShowFinancement(true)
     }
   }
 
-  const pageTitle = showAVI ? 'Obtenir mon A.V.I' : showFinancement ? 'Demande de financement' : (TITLES[activePage] ?? 'Acceuil')
+  const pageTitle = showAVI ? 'Obtenir mon A.V.I' : showLogement ? 'Attestation de logement' : showFinancement ? 'Demande de financement' : (TITLES[activePage] ?? 'Acceuil')
 
   function renderContent(): JSX.Element {
     if (showAVI) {
       return <AVIPage onBack={() => { setShowAVI(false); setActivePage('accueil') }} />
+    }
+
+    if (showLogement) {
+      return <LogementPage onBack={() => { setShowLogement(false); setActivePage('accueil') }} />
     }
 
     if (showFinancement) {
@@ -454,7 +463,7 @@ export default function DashboardPage(): JSX.Element {
 
       {/* Sidebar */}
       <Sidebar 
-        activePage={showAVI || showFinancement ? 'services' : activePage} 
+        activePage={showAVI || showLogement || showFinancement ? 'services' : activePage} 
         onNavigate={handleNavigate}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
