@@ -73,9 +73,9 @@ export function NavButtons({
           style={{
             padding: '12px 28px',
             borderRadius: 10,
-            border: '1.5px solid #E5E9F2',
+            border: '1.5px solid #D1D5DB',
             background: '#fff',
-            color: '#64748B',
+            color: '#374151',
             fontWeight: 600,
             fontSize: '0.9rem',
             cursor: 'pointer',
@@ -93,13 +93,13 @@ export function NavButtons({
             padding: '12px 36px',
             borderRadius: 10,
             border: 'none',
-            background: nextDisabled || loading ? '#94A3B8' : '#2A4F87',
+            background: nextDisabled || loading ? '#94A3B8' : '#2563EB',
             color: '#fff',
             fontWeight: 700,
             fontSize: '0.9rem',
             cursor: nextDisabled || loading ? 'not-allowed' : 'pointer',
             fontFamily: 'var(--font-body)',
-            boxShadow: nextDisabled || loading ? 'none' : '0 4px 14px rgba(42,79,135,0.35)',
+            boxShadow: nextDisabled || loading ? 'none' : '0 4px 14px rgba(37,99,235,0.35)',
             transition: 'all 0.15s',
           }}
         >

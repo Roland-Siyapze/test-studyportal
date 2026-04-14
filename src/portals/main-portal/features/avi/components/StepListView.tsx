@@ -179,33 +179,61 @@ export function StepListView({ steps, onStart, onStepSelect, canEdit }: StepList
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: canEdit ? 'space-between' : 'center',
         gap: 12,
         marginTop: 28,
+        width: '100%',
       }}>
-        <button style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 8,
-          padding: '12px 22px',
-          borderRadius: 10,
-          border: 'none',
-          background: '#6B7280',
-          color: '#fff',
-          fontWeight: 600,
-          fontSize: '0.85rem',
-          cursor: 'pointer',
-          fontFamily: 'var(--font-body)',
-          flexShrink: 0,
-        }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Télécharger un résumé
-        </button>
+        {canEdit ? (
+          <button style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            padding: '12px 22px',
+            borderRadius: 10,
+            border: 'none',
+            background: '#6B7280',
+            color: '#fff',
+            fontWeight: 600,
+            fontSize: '0.85rem',
+            cursor: 'pointer',
+            fontFamily: 'var(--font-body)',
+            flexShrink: 0,
+          }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Télécharger un résumé
+          </button>
+        ) : (
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <button style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              padding: '12px 22px',
+              borderRadius: 10,
+              border: 'none',
+              background: '#6B7280',
+              color: '#fff',
+              fontWeight: 600,
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-body)',
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Télécharger un résumé
+            </button>
+          </div>
+        )}
 
         {canEdit && (
           <button

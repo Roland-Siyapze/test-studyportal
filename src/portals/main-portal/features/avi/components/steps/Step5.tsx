@@ -55,7 +55,7 @@ export function Step5({ onNext, onBack, canEdit }: Step5Props): JSX.Element {
                 justifyContent: 'space-between',
                 padding: '18px 20px',
                 borderRadius: expanded === opt.id ? '12px 12px 0 0' : 12,
-                border: `1.5px solid ${expanded === opt.id ? '#2A4F87' : '#E5E9F2'}`,
+                border: `1.5px solid ${expanded === opt.id ? '#2563EB' : '#D1D5DB'}`,
                 borderBottom: expanded === opt.id ? 'none' : undefined,
                 background: '#fff',
                 cursor: canEdit ? 'pointer' : 'default',

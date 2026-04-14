@@ -113,7 +113,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
               alignItems: 'center',
               gap: 6,
               padding: '12px 14px',
-              border: '1.5px solid #E5E9F2',
+              border: '1.5px solid #D1D5DB',
               borderRadius: 10,
               background: '#F8FAFC',
               fontSize: '0.88rem',
@@ -158,7 +158,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
               style={{
                 padding: '11px 16px',
                 borderRadius: 10,
-                border: '1.5px solid #E5E9F2',
+                border: '1.5px solid #D1D5DB',
                 background: canEdit ? '#fff' : '#F1F5F9',
                 color: '#374151',
                 fontSize: '0.85rem',

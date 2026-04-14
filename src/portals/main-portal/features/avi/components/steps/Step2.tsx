@@ -74,7 +74,7 @@ export function Step2({ onNext, onBack, canEdit }: Step2Props): JSX.Element {
               style={{
                 padding: '11px 16px',
                 borderRadius: 10,
-                border: '1.5px solid #E5E9F2',
+                border: '1.5px solid #D1D5DB',
                 background: canEdit ? '#fff' : '#F1F5F9',
                 color: '#374151',
                 fontSize: '0.85rem',

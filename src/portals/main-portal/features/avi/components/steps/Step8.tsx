@@ -44,8 +44,8 @@ export function Step8({ onNext, onBack }: Step8Props): JSX.Element {
                 style={{
                   padding: '22px 24px',
                   borderRadius: 12,
-                  border: `2px solid ${showDoc && idx === 0 ? '#2A4F87' : '#E5E9F2'}`,
-                  background: showDoc && idx === 0 ? '#EBF0FA' : '#fff',
+                  border: `2px solid ${showDoc && idx === 0 ? '#2563EB' : '#D1D5DB'}`,
+                  background: showDoc && idx === 0 ? '#EFF6FF' : '#fff',
                   cursor: 'pointer',
                   fontFamily: 'var(--font-display)',
                   fontWeight: 700,

@@ -47,8 +47,8 @@ export function Step6({ onNext, onBack, canEdit, onBankSelected }: Step6Props): 
             style={{
               padding: '20px 28px',
               borderRadius: 12,
-              border: `2px solid ${selectedBank === bank.id ? '#2A4F87' : '#E5E9F2'}`,
-              background: selectedBank === bank.id ? '#EBF0FA' : '#fff',
+              border: `2px solid ${selectedBank === bank.id ? '#2563EB' : '#D1D5DB'}`,
+              background: selectedBank === bank.id ? '#EFF6FF' : '#fff',
               cursor: canEdit ? 'pointer' : 'default',
               display: 'flex',
               alignItems: 'center',

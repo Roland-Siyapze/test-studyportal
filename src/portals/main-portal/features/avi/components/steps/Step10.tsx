@@ -56,11 +56,11 @@ export function Step10({ onFinish, onBack, canEdit }: Step10Props): JSX.Element 
             input.click()
           }}
           style={{
-            border: `2px dashed ${dragging ? '#2A4F87' : '#E5E9F2'}`,
+            border: `2px dashed ${dragging ? '#2563EB' : '#D1D5DB'}`,
             borderRadius: 14,
             padding: '40px',
             textAlign: 'center',
-            background: dragging ? '#EBF0FA' : '#F8FAFC',
+            background: dragging ? '#EFF6FF' : '#F8FAFC',
             cursor: 'pointer',
             transition: 'all 0.15s',
             maxWidth: 480,
