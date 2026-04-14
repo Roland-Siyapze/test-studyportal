@@ -2,6 +2,8 @@ import type { JSX } from 'react'
 import { useState } from 'react'
 import { NavButtons } from '../ui'
 import { AVIStepper } from '../../AVIStepper'
+import societeGeneraleImg from '@assets/societe-generale.png'
+import atlantiqueImg from '@assets/atlantiquebanque.png'
 
 export interface Step6Props {
   onNext: () => void
@@ -11,8 +13,8 @@ export interface Step6Props {
 }
 
 const BANKS = [
-  { id: 'societe-generale', name: 'Société Générale', logo: <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><div style={{ width: 28, height: 20, background: '#CC0000', borderRadius: 2 }} /><span style={{ fontWeight: 800, fontSize: '0.95rem', color: '#CC0000', fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>SOCIETE<br/>GENERALE</span></div> },
-  { id: 'banque-atlantique', name: 'Banque Atlantique', logo: <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><div style={{ width: 36, height: 36, borderRadius: '50%', background: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div><span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#F59E0B', fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>BANQUE<br/>ATLANTIQUE</span></div> },
+  { id: 'societe-generale', name: 'Société Générale', logo: <img src={societeGeneraleImg} alt="Société Générale" style={{ height: 85 }} /> },
+  { id: 'banque-atlantique', name: 'Banque Atlantique', logo: <img src={atlantiqueImg} alt="Banque Atlantique" style={{ height: 70 }} /> },
 ]
 
 export function Step6({ onNext, onBack, canEdit, onBankSelected }: Step6Props): JSX.Element {
@@ -45,7 +47,7 @@ export function Step6({ onNext, onBack, canEdit, onBankSelected }: Step6Props): 
             key={bank.id}
             onClick={() => { selectBank(bank.id) }}
             style={{
-              padding: '20px 28px',
+              padding: '5px',
               borderRadius: 12,
               border: `2px solid ${selectedBank === bank.id ? '#2563EB' : '#D1D5DB'}`,
               background: selectedBank === bank.id ? '#EFF6FF' : '#fff',

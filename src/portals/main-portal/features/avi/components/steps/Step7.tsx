@@ -1,6 +1,8 @@
 import type { JSX } from 'react'
 import { NavButtons } from '../ui'
 import { AVIStepper } from '../../AVIStepper'
+import societeGeneraleImg from '@assets/societe-generale.png'
+import atlantiqueImg from '@assets/atlantiquebanque.png'
 
 export interface Step7Props {
   onNext: () => void
@@ -20,7 +22,7 @@ const RIB_DATA: Record<string, { titulaire: string; adresse: string; ville: stri
     cle: '35',
     iban: 'FR76 3000 3021 3000 0209 9910 135',
     bic: 'SOGEFRPP',
-    logo: <div style={{ fontWeight: 900, fontSize: '0.95rem', color: '#CC0000', letterSpacing: '0.03em', fontFamily: 'var(--font-display)', textAlign: 'center' }}><span style={{ display: 'inline-block', width: 24, height: 18, background: '#CC0000', borderRadius: 2, marginRight: 6, verticalAlign: 'middle' }} />SOCIETE GENERALE</div>,
+    logo: <img src={societeGeneraleImg} alt="Société Générale" style={{ height: 80 }} />,
   },
   'banque-atlantique': {
     titulaire: 'R37 SARL',
@@ -33,7 +35,7 @@ const RIB_DATA: Record<string, { titulaire: string; adresse: string; ville: stri
     cle: '35',
     iban: 'FR76 3000 3021 3000 0209 9910 135',
     bic: 'SOGEFRPP',
-    logo: <div style={{ fontWeight: 900, fontSize: '0.9rem', color: '#F59E0B', letterSpacing: '0.03em', fontFamily: 'var(--font-display)', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><div style={{ width: 32, height: 32, borderRadius: '50%', background: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: '#fff', fontWeight: 900, fontSize: '0.7rem' }}>BA</span></div>BANQUE ATLANTIQUE</div>,
+    logo: <img src={atlantiqueImg} alt="Banque Atlantique" style={{ height: 32 }} />,
   },
 }
 
@@ -56,7 +58,7 @@ export function Step7({ onNext, onBack, selectedBank }: Step7Props): JSX.Element
       </h2>
 
       <div style={{ maxWidth: 480, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <div style={{ padding: '18px 24px', borderRadius: 12, border: '1.5px solid #E5E9F2', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ padding: '5px', borderRadius: 12, border: '1.5px solid #E5E9F2', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {rib.logo}
         </div>
 
