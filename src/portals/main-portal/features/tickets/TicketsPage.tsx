@@ -11,7 +11,6 @@
 import type { JSX} from 'react';
 import { useState } from 'react'
 import { ProtectedComponent } from '@components/ProtectedComponent'
-import { usePermissions } from '@hooks/usePermissions'
 import { MOCK_TICKETS } from '@services/mock/tickets.mock'
 import type { Ticket, TicketStatus, TicketPriority, CreateTicketDto } from '@contracts/api-contracts'
 
@@ -256,8 +255,7 @@ function TicketDetail({ ticket, onClose }: { ticket: Ticket; onClose: () => void
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function TicketsPage(): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { hasPermission: _hasPermission } = usePermissions()
+  // unused: hasPermission
   const [tickets, setTickets] = useState([...MOCK_TICKETS])
   const [showCreate, setShowCreate] = useState(false)
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null)

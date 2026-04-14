@@ -76,7 +76,7 @@ export function LogementPage({ onBack }: { onBack: () => void }): JSX.Element {
   const canView = hasPermission('document:read') || canEdit
 
   const [step, setStep] = useState(1)
-  const [form, setForm] = useState<LogementFormData>({ ...INITIAL_FORM })
+  const [form, setForm] = useState({ ...INITIAL_FORM })
   const [showSuccess, setShowSuccess] = useState(false)
 
   // ── Access denied ──────────────────────────────────────────────────────────

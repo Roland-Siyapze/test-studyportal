@@ -7,7 +7,8 @@
  *   - The portals/ folder structure drives the route tree (ARCH-001).
  */
 
-import { JSX, lazy, Suspense } from 'react'
+import type { JSX} from 'react';
+import { lazy, Suspense } from 'react'
 import {
   createBrowserRouter,
   Navigate,

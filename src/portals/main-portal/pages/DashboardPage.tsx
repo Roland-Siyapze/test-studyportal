@@ -416,11 +416,11 @@ export default function DashboardPage(): JSX.Element {
 
     switch (activePage) {
       case 'logement':
-        return <LogementPage onBack={() => setActivePage('accueil')} />
+        return <LogementPage onBack={() => { setActivePage('accueil'); }} />
       case 'financement':
         return <FinancementPage initialView="form" />
       case 'avi':
-        return <AVIPage onBack={() => setActivePage('accueil')} />
+        return <AVIPage onBack={() => { setActivePage('accueil'); }} />
       case 'tickets':
         return (
           <ProtectedComponent requires={['ticket:read', 'ticket:create']} mode="any" fallback={<AccessDenied />}>
@@ -454,7 +454,7 @@ export default function DashboardPage(): JSX.Element {
       {/* Sidebar Overlay */}
       <div 
         className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`}
-        onClick={() => setSidebarOpen(false)}
+        onClick={() => { setSidebarOpen(false); }}
       />
 
       {/* Sidebar */}
@@ -462,7 +462,7 @@ export default function DashboardPage(): JSX.Element {
         activePage={showAVI ? 'avi' : showLogement ? 'logement' : showFinancement ? 'financement' : activePage} 
         onNavigate={handleNavigate}
         isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
+        onClose={() => { setSidebarOpen(false); }}
       />
 
       {/* Main area — offset by sidebar width on desktop */}
@@ -473,7 +473,7 @@ export default function DashboardPage(): JSX.Element {
         flexDirection: 'column', 
         minHeight: '100vh',
       }} className="main-content">
-        <TopBar pageTitle={pageTitle} onMenuClick={() => setSidebarOpen(true)} />
+        <TopBar pageTitle={pageTitle} onMenuClick={() => { setSidebarOpen(true); }} />
 
         {/* Page content — with gray padding so cards appear floating */}
         <main style={{

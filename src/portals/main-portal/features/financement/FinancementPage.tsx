@@ -110,7 +110,7 @@ const INITIAL_FORM: FormData = {
 export function FinancementPage({ initialView = 'list' }: { initialView?: 'list' | 'form' }): JSX.Element {
   const [view, setView] = useState<'list' | 'form'>(initialView)
   const [step, setStep] = useState(1)
-  const [form, setForm] = useState<FormData>({ ...INITIAL_FORM })
+  const [form, setForm] = useState({ ...INITIAL_FORM })
   const [demandes, setDemandes] = useState([...MOCK_FINANCEMENT_DEMANDES])
 
   const handleChange = useCallback((key: keyof FormData, value: string | File | null) => {

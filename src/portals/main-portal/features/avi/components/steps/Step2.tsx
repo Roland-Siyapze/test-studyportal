@@ -28,17 +28,17 @@ export function Step2({ onNext, onBack, canEdit }: Step2Props): JSX.Element {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 500, margin: '0 auto' }}>
         <input style={inputStyle} value={etablissement} readOnly={!canEdit}
-          onChange={e => { canEdit && setEtablissement(e.target.value) }}
+          onChange={e => { if (canEdit) setEtablissement(e.target.value); }}
           placeholder="Nom de l'établissement d'accueil"
           onFocus={addFocus} onBlur={removeFocus}
         />
         <input style={inputStyle} value={formation} readOnly={!canEdit}
-          onChange={e => { canEdit && setFormation(e.target.value) }}
+          onChange={e => { if (canEdit) setFormation(e.target.value); }}
           placeholder="Titre de la formation"
           onFocus={addFocus} onBlur={removeFocus}
         />
         <input style={inputStyle} value={ville} readOnly={!canEdit}
-          onChange={e => { canEdit && setVille(e.target.value) }}
+          onChange={e => { if (canEdit) setVille(e.target.value); }}
           placeholder="Ville"
           onFocus={addFocus} onBlur={removeFocus}
         />
@@ -50,7 +50,7 @@ export function Step2({ onNext, onBack, canEdit }: Step2Props): JSX.Element {
               style={inputStyle}
               value={dateDebut}
               readOnly={!canEdit}
-              onChange={e => { canEdit && setDateDebut(e.target.value) }}
+              onChange={e => { if (canEdit) setDateDebut(e.target.value); }}
               onFocus={addFocus}
               onBlur={removeFocus}
             />

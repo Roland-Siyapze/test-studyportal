@@ -23,8 +23,8 @@ const MOCK_DELAY_MS = 800
  * Returns the mock AuthUser or throws on bad credentials.
  */
 export async function mockAuthenticate(
-  email: string,
-  _password: string  // password not validated in mock — any value works
+  email: string
+  // password not validated in mock — any value works
 ): Promise<AuthUser> {
   await new Promise<void>((resolve) => setTimeout(resolve, MOCK_DELAY_MS))
 

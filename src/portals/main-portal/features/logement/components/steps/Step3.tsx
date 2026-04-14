@@ -84,7 +84,7 @@ export function LogementStep3({
               style={{ ...inputStyle, paddingRight: 52 }}
               value={data.montantLoyer}
               readOnly={!canEdit}
-              onChange={e => { canEdit && onChange('montantLoyer', e.target.value) }}
+              onChange={e => { if (canEdit) onChange('montantLoyer', e.target.value); }}
               placeholder="Exemple: 500"
               onFocus={addFocus}
               onBlur={removeFocus}
@@ -107,7 +107,7 @@ export function LogementStep3({
               style={selectStyle}
               value={data.dureeContrat}
               disabled={!canEdit}
-              onChange={e => { canEdit && onChange('dureeContrat', e.target.value) }}
+              onChange={e => { if (canEdit) onChange('dureeContrat', e.target.value); }}
               onFocus={addFocus}
               onBlur={removeFocus}
             >
@@ -127,7 +127,7 @@ export function LogementStep3({
               style={selectStyle}
               value={data.garant}
               disabled={!canEdit}
-              onChange={e => { canEdit && onChange('garant', e.target.value) }}
+              onChange={e => { if (canEdit) onChange('garant', e.target.value); }}
               onFocus={addFocus}
               onBlur={removeFocus}
             >
@@ -184,7 +184,7 @@ export function LogementStep3({
           <textarea
             value={data.commentaires}
             readOnly={!canEdit}
-            onChange={e => { canEdit && onChange('commentaires', e.target.value) }}
+            onChange={e => { if (canEdit) onChange('commentaires', e.target.value); }}
             placeholder="Informations supplémentaires sur votre situation de logement..."
             rows={4}
             style={{

@@ -63,7 +63,7 @@ export function LogementStep2({
           style={inputStyle}
           value={data.etablissement}
           readOnly={!canEdit}
-          onChange={e => { canEdit && onChange('etablissement', e.target.value) }}
+          onChange={e => { if (canEdit) onChange('etablissement', e.target.value); }}
           placeholder="Nom de l'établissement d'accueil"
           onFocus={addFocus}
           onBlur={removeFocus}
@@ -74,7 +74,7 @@ export function LogementStep2({
           style={inputStyle}
           value={data.formation}
           readOnly={!canEdit}
-          onChange={e => { canEdit && onChange('formation', e.target.value) }}
+          onChange={e => { if (canEdit) onChange('formation', e.target.value); }}
           placeholder="Titre de la formation"
           onFocus={addFocus}
           onBlur={removeFocus}
@@ -85,7 +85,7 @@ export function LogementStep2({
           style={inputStyle}
           value={data.ville}
           readOnly={!canEdit}
-          onChange={e => { canEdit && onChange('ville', e.target.value) }}
+          onChange={e => { if (canEdit) onChange('ville', e.target.value); }}
           placeholder="Ville"
           onFocus={addFocus}
           onBlur={removeFocus}
@@ -99,7 +99,7 @@ export function LogementStep2({
               style={selectStyle}
               value={data.typeLogement}
               disabled={!canEdit}
-              onChange={e => { canEdit && onChange('typeLogement', e.target.value) }}
+              onChange={e => { if (canEdit) onChange('typeLogement', e.target.value); }}
               onFocus={addFocus}
               onBlur={removeFocus}
             >
@@ -116,7 +116,7 @@ export function LogementStep2({
           style={inputStyle}
           value={data.adresseLogement}
           readOnly={!canEdit}
-          onChange={e => { canEdit && onChange('adresseLogement', e.target.value) }}
+          onChange={e => { if (canEdit) onChange('adresseLogement', e.target.value); }}
           placeholder="Adresse du logement"
           onFocus={addFocus}
           onBlur={removeFocus}
@@ -127,7 +127,7 @@ export function LogementStep2({
           style={inputStyle}
           value={data.codePostal}
           readOnly={!canEdit}
-          onChange={e => { canEdit && onChange('codePostal', e.target.value) }}
+          onChange={e => { if (canEdit) onChange('codePostal', e.target.value); }}
           placeholder="Code postal"
           onFocus={addFocus}
           onBlur={removeFocus}
@@ -142,7 +142,7 @@ export function LogementStep2({
               style={inputStyle}
               value={data.dateArrivee}
               readOnly={!canEdit}
-              onChange={e => { canEdit && onChange('dateArrivee', e.target.value) }}
+              onChange={e => { if (canEdit) onChange('dateArrivee', e.target.value); }}
               onFocus={addFocus}
               onBlur={removeFocus}
             />
@@ -154,7 +154,7 @@ export function LogementStep2({
               style={inputStyle}
               value={data.dateDepart}
               readOnly={!canEdit}
-              onChange={e => { canEdit && onChange('dateDepart', e.target.value) }}
+              onChange={e => { if (canEdit) onChange('dateDepart', e.target.value); }}
               onFocus={addFocus}
               onBlur={removeFocus}
             />

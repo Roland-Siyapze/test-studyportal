@@ -50,7 +50,7 @@ export function Step3({ onNext, onBack, canEdit }: Step3Props): JSX.Element {
         <div>
           <Label text="Montant à recevoir par mois en euro" />
           <input style={inputStyle} value={montant} readOnly={!canEdit}
-            onChange={e => { canEdit && setMontant(e.target.value) }}
+            onChange={e => { if (canEdit) setMontant(e.target.value); }}
             placeholder="Exemple: 700€"
             onFocus={addFocus} onBlur={removeFocus}
           />

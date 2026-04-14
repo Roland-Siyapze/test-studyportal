@@ -192,7 +192,7 @@ export function useAuth(): UseAuthReturn {
           if (!email || !password) {
             throw new Error('Email and password are required')
           }
-          const authUser = await mockAuthenticate(email, password)
+          const authUser = await mockAuthenticate(email)
           setUser(authUser)
         } else {
           // Production mode: try direct grant flow first (custom UI)

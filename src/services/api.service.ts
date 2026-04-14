@@ -24,7 +24,7 @@ import type { ApiResponse } from '@contracts/api-contracts'
 // ─────────────────────────────────────────────────────────────────────────────
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL as string ?? 'http://localhost:8081/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8081/api',
   timeout: 10_000,
   headers: {
     'Content-Type': 'application/json',

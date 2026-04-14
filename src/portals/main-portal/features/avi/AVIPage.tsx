@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
+ 
 /**
  * @file AVIPage.tsx
  * @description "Obtenir mon A.V.I" — full 10-step multi-page flow.
@@ -66,7 +66,7 @@ export function AVIPage({ onBack }: { onBack: () => void }): JSX.Element {
 
   const [view, setView] = useState<AVIView>('list')
   const [currentStep, setCurrentStep] = useState(1)
-  const [steps, setSteps] = useState<AVIStep[]>(INITIAL_STEPS)
+  const [steps, setSteps] = useState(INITIAL_STEPS)
   const [selectedBank, setSelectedBank] = useState('societe-generale')
   const [showSuccess, setShowSuccess] = useState(false)
   const [notification, setNotification] = useState<{

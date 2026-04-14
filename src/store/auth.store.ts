@@ -57,19 +57,19 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
       // Actions
       setUser: (user) =>
-        set({ user, error: null }, false, 'auth/setUser'),
+        { set({ user, error: null }, false, 'auth/setUser'); },
 
       clearUser: () =>
-        set({ user: null }, false, 'auth/clearUser'),
+        { set({ user: null }, false, 'auth/clearUser'); },
 
       setLoading: (isLoading) =>
-        set({ isLoading }, false, 'auth/setLoading'),
+        { set({ isLoading }, false, 'auth/setLoading'); },
 
       setInitialized: (isInitialized) =>
-        set({ isInitialized }, false, 'auth/setInitialized'),
+        { set({ isInitialized }, false, 'auth/setInitialized'); },
 
       setError: (error) =>
-        set({ error }, false, 'auth/setError'),
+        { set({ error }, false, 'auth/setError'); },
     }),
     { name: 'StudyPortal/Auth' }
   )

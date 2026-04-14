@@ -35,7 +35,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
             style={{ ...inputStyle, background: !canEdit ? '#F1F5F9' : undefined }}
             value={firstName}
             readOnly={!canEdit}
-            onChange={e => { canEdit && setFirstName(e.target.value) }}
+            onChange={e => { if (canEdit) setFirstName(e.target.value); }}
             placeholder="Prénom"
             onFocus={addFocus}
             onBlur={removeFocus}
@@ -47,7 +47,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
             style={inputStyle}
             value={passportNumber}
             readOnly={!canEdit}
-            onChange={e => { canEdit && setPassportNumber(e.target.value) }}
+            onChange={e => { if (canEdit) setPassportNumber(e.target.value); }}
             placeholder="Numéro de passeport"
             onFocus={addFocus}
             onBlur={removeFocus}
@@ -59,7 +59,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
             style={{ ...inputStyle, background: !canEdit ? '#F1F5F9' : undefined }}
             value={lastName}
             readOnly={!canEdit}
-            onChange={e => { canEdit && setLastName(e.target.value) }}
+            onChange={e => { if (canEdit) setLastName(e.target.value); }}
             placeholder="Nom"
             onFocus={addFocus}
             onBlur={removeFocus}
@@ -73,7 +73,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
             style={inputStyle}
             value={passportDelivery}
             readOnly={!canEdit}
-            onChange={e => { canEdit && setPassportDelivery(e.target.value) }}
+            onChange={e => { if (canEdit) setPassportDelivery(e.target.value); }}
             onFocus={addFocus}
             onBlur={removeFocus}
           />
@@ -85,7 +85,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
             type="email"
             value={email}
             readOnly={!canEdit}
-            onChange={e => { canEdit && setEmail(e.target.value) }}
+            onChange={e => { if (canEdit) setEmail(e.target.value); }}
             placeholder="Email"
             onFocus={addFocus}
             onBlur={removeFocus}
@@ -99,7 +99,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
             style={inputStyle}
             value={passportExpiry}
             readOnly={!canEdit}
-            onChange={e => { canEdit && setPassportExpiry(e.target.value) }}
+            onChange={e => { if (canEdit) setPassportExpiry(e.target.value); }}
             onFocus={addFocus}
             onBlur={removeFocus}
           />
@@ -131,7 +131,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
               style={{ ...inputStyle, flex: 1 }}
               value={phone}
               readOnly={!canEdit}
-              onChange={e => { canEdit && setPhone(e.target.value) }}
+              onChange={e => { if (canEdit) setPhone(e.target.value); }}
               placeholder="6XX XXX XXX"
               onFocus={addFocus}
               onBlur={removeFocus}
@@ -149,7 +149,7 @@ export function Step1({ onNext, onCancel, canEdit }: Step1Props): JSX.Element {
                 const input = document.createElement('input')
                 input.type = 'file'
                 input.accept = '.pdf,.jpg,.png'
-                input.onchange = (ev) => {
+                input.onchange = (ev): void => {
                   const f = (ev.target as HTMLInputElement).files?.[0]
                   if (f) setFileName(f.name)
                 }

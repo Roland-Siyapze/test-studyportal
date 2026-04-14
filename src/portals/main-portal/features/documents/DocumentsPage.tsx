@@ -94,7 +94,7 @@ function UploadModal({ onClose, onUpload }: {
             marginBottom: 20,
             cursor: 'pointer',
           }}
-          onClick={() => { const i = document.createElement('input'); i.type = 'file'; i.onchange = (e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (f) setName(f.name) }; i.click() }}
+          onClick={(): void => { const i = document.createElement('input'); i.type = 'file'; i.onchange = (e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (f) setName(f.name) }; i.click() }}
         >
           <div style={{ fontSize: '2rem', marginBottom: 8 }}>📁</div>
           <p style={{ fontWeight: 600, color: '#374151', fontSize: '0.9rem', fontFamily: 'var(--font-display)' }}>

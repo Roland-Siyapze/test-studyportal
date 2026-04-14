@@ -45,7 +45,7 @@ export function LogementStep1({
             style={{ ...inputStyle, background: !canEdit ? '#F1F5F9' : undefined }}
             value={data.prenom}
             readOnly={!canEdit}
-            onChange={e => { canEdit && onChange('prenom', e.target.value) }}
+            onChange={e => { if (canEdit) onChange('prenom', e.target.value); }}
             placeholder="Prénom"
             onFocus={addFocus}
             onBlur={removeFocus}
@@ -58,7 +58,7 @@ export function LogementStep1({
             style={inputStyle}
             value={data.passportNumber}
             readOnly={!canEdit}
-            onChange={e => { canEdit && onChange('passportNumber', e.target.value) }}
+            onChange={e => { if (canEdit) onChange('passportNumber', e.target.value); }}
             placeholder="Numéro de passeport"
             onFocus={addFocus}
             onBlur={removeFocus}
@@ -71,7 +71,7 @@ export function LogementStep1({
             style={{ ...inputStyle, background: !canEdit ? '#F1F5F9' : undefined }}
             value={data.nom}
             readOnly={!canEdit}
-            onChange={e => { canEdit && onChange('nom', e.target.value) }}
+            onChange={e => { if (canEdit) onChange('nom', e.target.value); }}
             placeholder="Nom"
             onFocus={addFocus}
             onBlur={removeFocus}
@@ -86,7 +86,7 @@ export function LogementStep1({
             style={inputStyle}
             value={data.passportDelivery}
             readOnly={!canEdit}
-            onChange={e => { canEdit && onChange('passportDelivery', e.target.value) }}
+            onChange={e => { if (canEdit) onChange('passportDelivery', e.target.value); }}
             onFocus={addFocus}
             onBlur={removeFocus}
           />
@@ -99,7 +99,7 @@ export function LogementStep1({
             type="email"
             value={data.email}
             readOnly={!canEdit}
-            onChange={e => { canEdit && onChange('email', e.target.value) }}
+            onChange={e => { if (canEdit) onChange('email', e.target.value); }}
             placeholder="Adresse e-mail"
             onFocus={addFocus}
             onBlur={removeFocus}
@@ -114,7 +114,7 @@ export function LogementStep1({
             style={inputStyle}
             value={data.passportExpiry}
             readOnly={!canEdit}
-            onChange={e => { canEdit && onChange('passportExpiry', e.target.value) }}
+            onChange={e => { if (canEdit) onChange('passportExpiry', e.target.value); }}
             onFocus={addFocus}
             onBlur={removeFocus}
           />
@@ -147,7 +147,7 @@ export function LogementStep1({
               style={{ ...inputStyle, flex: 1 }}
               value={data.telephone}
               readOnly={!canEdit}
-              onChange={e => { canEdit && onChange('telephone', e.target.value) }}
+              onChange={e => { if (canEdit) onChange('telephone', e.target.value); }}
               placeholder="6XX XXX XXX"
               onFocus={addFocus}
               onBlur={removeFocus}
