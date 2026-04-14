@@ -49,6 +49,7 @@ function DocumentPreview({ file }: { file: File | null }): JSX.Element {
       {file ? (
         isImage ? (
           <img 
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             src={objectUrl!} 
             alt="Preview" 
             style={{ width: '100%', height: '100%', objectFit: 'cover' }} 

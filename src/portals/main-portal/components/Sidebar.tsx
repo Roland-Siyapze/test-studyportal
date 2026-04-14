@@ -254,6 +254,10 @@ export function Sidebar({ activePage, onNavigate, isOpen, onClose }: SidebarProp
             <NavBtn label="Notifications" icon={Icon.bell} active={activePage === 'notifications'} onClick={go('notifications')} />
           </ProtectedComponent>
 
+          <ProtectedComponent requires="document:read">
+            <NavBtn label="Mes documents" icon={Icon.file} active={activePage === 'documents'} onClick={go('documents')} />
+          </ProtectedComponent>
+
           <ProtectedComponent requires="admin:access">
             <NavBtn label="Paramètres" icon={Icon.settings} active={activePage === 'parametres'} onClick={go('parametres')} />
           </ProtectedComponent>

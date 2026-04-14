@@ -23,6 +23,7 @@ const ETAPES = [
   { label: 'Etape x', done: false },
 ]
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function Step6({ onBack: _onBack, onTerminer, onCancel }: Step6Props): JSX.Element {
   const [confirmModal, setConfirmModal] = useState<'submit' | 'cancel' | null>(null)
   const [submitting, setSubmitting] = useState(false)
