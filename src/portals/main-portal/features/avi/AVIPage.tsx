@@ -127,7 +127,7 @@ export function AVIPage({ onBack }: { onBack: () => void }): JSX.Element {
   if (showSuccess) {
     return (
       <div style={{ animation: 'fadeIn 0.35s ease' }}>
-        <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #E5E9F2', boxShadow: '0 4px 24px rgba(42,79,135,0.08)', overflow: 'hidden' }}>
+<div style={{ background: '#fff', borderRadius: 20, border: '1px solid #E5E9F2', boxShadow: '0 4px 24px rgba(42,79,135,0.08)', overflow: 'hidden', padding: '32px 48px' }}>
           <SuccessScreen onGoToDemandes={onBack} />
         </div>
       </div>
