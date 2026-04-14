@@ -56,7 +56,7 @@ export function Step4({ data, onChangeEcheances, onChangeNombre, onNext, onBack 
     <div style={{ padding: '32px 40px', animation: 'fadeIn 0.3s ease' }}>
       <Stepper steps={STEPS_META} currentStep={4} totalVisibleSteps={3} startStep={4} />
 
-      <div style={{ marginBottom: 28, maxWidth: 240 }}>
+      <div style={{ marginBottom: 28, maxWidth: 240, margin: '15px auto' }}>
         <label style={{ display: 'block', fontSize: '0.85rem', color: '#374151', marginBottom: 8, fontFamily: 'var(--font-body)', fontWeight: 500 }}>
           Choisissez le nombre d'échéances
         </label>
@@ -78,7 +78,7 @@ export function Step4({ data, onChangeEcheances, onChangeNombre, onNext, onBack 
         </div>
       </div>
 
-      <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: '#1A2332', textAlign: 'center', marginBottom: 20 }}>
+      <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '1rem', color: '#1A2332', textAlign: 'center', marginBottom: 20 }}>
         Veuillez renseigner les différentes dates
       </h3>
 
