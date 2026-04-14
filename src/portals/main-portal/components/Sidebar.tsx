@@ -8,7 +8,6 @@
  */
 
 import type { JSX} from 'react';
-import { useState } from 'react'
 import { useAuth } from '@hooks/useAuth'
 import { ProtectedComponent } from '@components/ProtectedComponent'
 import logo from '@assets/logo.png'
@@ -22,6 +21,23 @@ const Icon = {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
       <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  ),
+  house: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <path d="M9 22V12h6v10"/>
+    </svg>
+  ),
+  money: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23"/>
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>
+  ),
+  plane: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
     </svg>
   ),
   agency: (
@@ -107,14 +123,9 @@ const Icon = {
 
 export type ActivePage =
   | 'accueil'
-  | 'mon-agence'
-  | 'services'
-  | 'subscriptions-services'
-  | 'subscriptions-financement'
-  | 'subscriptions-remboursements'
-  | 'preuves'
-  | 'wallet-historiques'
-  | 'affiliation'
+  | 'logement'
+  | 'financement'
+  | 'avi'
   | 'tableau-de-bord'
   | 'parametres'
   | 'tickets'
@@ -170,83 +181,12 @@ function NavBtn({
   )
 }
 
-function SubBtn({
-  label, active, onClick,
-}: { label: string; active: boolean; onClick: () => void }): JSX.Element {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        display: 'block',
-        width: '100%',
-        padding: '8px 14px 8px 46px',
-        borderRadius: 8,
-        border: 'none',
-        background: active ? '#EEF0F8' : 'transparent',
-        color: active ? '#2563EB' : '#64748B',
-        fontWeight: active ? 600 : 400,
-        fontSize: '0.845rem',
-        fontFamily: 'var(--font-body)',
-        cursor: 'pointer',
-        textAlign: 'left',
-        transition: 'background 0.12s, color 0.12s',
-      }}
-      onMouseEnter={e => { if (!active) { (e.currentTarget as HTMLButtonElement).style.background = '#F5F6FB'; (e.currentTarget as HTMLButtonElement).style.color = '#374151' } }}
-      onMouseLeave={e => { if (!active) { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#64748B' } }}
-    >
-      {label}
-    </button>
-  )
-}
-
-function Expandable({
-  label, icon, open, onToggle, active, children,
-}: {
-  label: string; icon: JSX.Element; open: boolean
-  onToggle: () => void; active: boolean; children: JSX.Element
-}): JSX.Element {
-  return (
-    <div>
-      <button
-        onClick={onToggle}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
-          width: '100%',
-          padding: '10px 14px',
-          borderRadius: 10,
-          border: 'none',
-          background: 'transparent',
-          color: active ? '#2563EB' : '#64748B',
-          fontWeight: active ? 700 : 500,
-          fontSize: '0.875rem',
-          fontFamily: 'var(--font-body)',
-          cursor: 'pointer',
-          transition: 'background 0.12s, color 0.12s',
-          lineHeight: 1,
-        }}
-        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#F5F6FB' }}
-        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent' }}
-      >
-        <span style={{ flexShrink: 0, opacity: active ? 1 : 0.65 }}>{icon}</span>
-        <span style={{ flex: 1 }}>{label}</span>
-        {Icon.chevron(open)}
-      </button>
-      {open && <div style={{ marginTop: 2 }}>{children}</div>}
-    </div>
-  )
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Main
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function Sidebar({ activePage, onNavigate, isOpen, onClose }: SidebarProps): JSX.Element {
   const { user, logout } = useAuth()
-  const [suscOpen, setSuscOpen] = useState(activePage.startsWith('subscriptions'))
-  const [walletOpen, setWalletOpen] = useState(activePage === 'wallet-historiques')
-  const [agenceOpen, setAgenceOpen] = useState(false)
 
   const go = (page: ActivePage) => () => { 
     onNavigate(page)
@@ -289,36 +229,13 @@ export function Sidebar({ activePage, onNavigate, isOpen, onClose }: SidebarProp
         {/* Nav items */}
         <nav style={{ flex: 1, overflowY: 'auto', padding: '4px 10px', display: 'flex', flexDirection: 'column', gap: 1 }}>
 
-          <NavBtn label="Acceuil" icon={Icon.home} active={activePage === 'accueil'} onClick={go('accueil')} />
+          <NavBtn label="Accueil" icon={Icon.home} active={activePage === 'accueil'} onClick={go('accueil')} />
 
-          <Expandable label="Mon agence" icon={Icon.agency} open={agenceOpen}
-            onToggle={() => { setAgenceOpen(o => !o); }} active={activePage === 'mon-agence'}>
-            <>
-              <SubBtn label="Vue générale" active={activePage === 'mon-agence'} onClick={go('mon-agence')} />
-            </>
-          </Expandable>
+          <NavBtn label="Logement" icon={Icon.house} active={activePage === 'logement'} onClick={go('logement')} />
 
-          <NavBtn label="Services" icon={Icon.grid} active={activePage === 'services'} onClick={go('services')} />
+          <NavBtn label="Financement" icon={Icon.money} active={activePage === 'financement'} onClick={go('financement')} />
 
-          <Expandable label="Mes suscriptions" icon={Icon.box} open={suscOpen}
-            onToggle={() => { setSuscOpen(o => !o); }} active={activePage.startsWith('subscriptions')}>
-            <>
-              <SubBtn label="Services" active={activePage === 'subscriptions-services'} onClick={go('subscriptions-services')} />
-              <SubBtn label="Financement" active={activePage === 'subscriptions-financement'} onClick={go('subscriptions-financement')} />
-              <SubBtn label="Remboursements" active={activePage === 'subscriptions-remboursements'} onClick={go('subscriptions-remboursements')} />
-            </>
-          </Expandable>
-
-          <NavBtn label="Preuves de versement" icon={Icon.file} active={activePage === 'preuves'} onClick={go('preuves')} />
-
-          <Expandable label="Mon Wallet Boaz" icon={Icon.wallet} open={walletOpen}
-            onToggle={() => { setWalletOpen(o => !o); }} active={activePage === 'wallet-historiques'}>
-            <>
-              <SubBtn label="Mes historiques" active={activePage === 'wallet-historiques'} onClick={go('wallet-historiques')} />
-            </>
-          </Expandable>
-
-          <NavBtn label="Programme d'affiliation" icon={Icon.link} active={activePage === 'affiliation'} onClick={go('affiliation')} />
+          <NavBtn label="A.V.I" icon={Icon.plane} active={activePage === 'avi'} onClick={go('avi')} />
 
           {/* GENERAL divider */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '14px 4px 8px', margin: '4px 0' }}>

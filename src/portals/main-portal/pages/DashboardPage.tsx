@@ -415,6 +415,12 @@ export default function DashboardPage(): JSX.Element {
     }
 
     switch (activePage) {
+      case 'logement':
+        return <LogementPage onBack={() => setActivePage('accueil')} />
+      case 'financement':
+        return <FinancementPage initialView="form" />
+      case 'avi':
+        return <AVIPage onBack={() => setActivePage('accueil')} />
       case 'tickets':
         return (
           <ProtectedComponent requires={['ticket:read', 'ticket:create']} mode="any" fallback={<AccessDenied />}>
@@ -427,16 +433,6 @@ export default function DashboardPage(): JSX.Element {
             <DocumentsPage />
           </ProtectedComponent>
         )
-      case 'subscriptions-financement':
-        return (
-          <ProtectedComponent
-            requires="ticket:create"
-            mode="any"
-            fallback={<AccessDenied />}
-          >
-            <FinancementPage />
-          </ProtectedComponent>
-        )  
       case 'notifications':
         return (
           <ProtectedComponent requires="notification:read" fallback={<AccessDenied />}>
@@ -463,7 +459,7 @@ export default function DashboardPage(): JSX.Element {
 
       {/* Sidebar */}
       <Sidebar 
-        activePage={showAVI || showLogement || showFinancement ? 'services' : activePage} 
+        activePage={showAVI ? 'avi' : showLogement ? 'logement' : showFinancement ? 'financement' : activePage} 
         onNavigate={handleNavigate}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
