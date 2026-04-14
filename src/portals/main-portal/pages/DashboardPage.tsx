@@ -399,7 +399,7 @@ export default function DashboardPage(): JSX.Element {
     }
   }
 
-  const pageTitle = showAVI ? 'Obtenir mon A.V.I' : showLogement ? 'Attestation de logement' : showFinancement ? 'Demande de financement' : (TITLES[activePage] ?? 'Acceuil')
+  const pageTitle = showAVI || activePage === 'avi' ? 'Obtenir mon A.V.I' : showLogement || activePage === 'logement' ? 'Attestation de logement' : showFinancement || activePage === 'financement' ? 'Demande de financement' : (TITLES[activePage] ?? 'Accueil')
 
   function renderContent(): JSX.Element {
     if (showAVI) {
