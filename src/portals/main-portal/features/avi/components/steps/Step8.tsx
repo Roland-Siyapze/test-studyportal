@@ -30,13 +30,13 @@ export function Step8({ onNext, onBack }: Step8Props): JSX.Element {
       <p style={{ fontSize: '0.7rem', color: '#94A3B8', textAlign: 'center', marginBottom: 12, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'var(--font-body)' }}>Stepper</p>
       <AVIStepper steps={stepper} current={8} />
 
-      <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
-        <div style={{ flex: 1 }}>
+      <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start', justifyContent: 'center', marginTop: 24 }}>
+        <div style={{ flex: 1, maxWidth: 400 }}>
           <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.2rem', color: '#1A2332', marginBottom: 20 }}>
             Cliquez pour voir vos proformas
           </h2>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {['Proforma de service', 'Proforma de financement'].map((label, idx) => (
               <button
                 key={label}
@@ -52,8 +52,9 @@ export function Step8({ onNext, onBack }: Step8Props): JSX.Element {
                   fontSize: '1rem',
                   color: '#1A2332',
                   textAlign: 'left',
-                  borderLeft: '4px solid #2A4F87',
+                  borderLeft: '4px solid #2563EB',
                   transition: 'all 0.15s',
+                  boxShadow: showDoc && idx === 0 ? '0 4px 12px rgba(37,99,235,0.15)' : '0 2px 8px rgba(0,0,0,0.04)',
                 }}
               >
                 {label}
@@ -63,12 +64,12 @@ export function Step8({ onNext, onBack }: Step8Props): JSX.Element {
         </div>
 
         {showDoc && (
-          <div style={{ width: 340, flexShrink: 0, border: '1px solid #E5E9F2', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', fontSize: '0.72rem', fontFamily: 'var(--font-body)', animation: 'fadeIn 0.2s ease' }}>
+          <div style={{ width: 380, flexShrink: 0, border: '1px solid #E5E9F2', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', fontSize: '0.72rem', fontFamily: 'var(--font-body)', animation: 'fadeIn 0.2s ease' }}>
             <div style={{ padding: '12px 16px', background: '#F8FAFC', borderBottom: '1px solid #E5E9F2' }}>
               <p style={{ fontSize: '0.65rem', color: '#94A3B8', marginBottom: 2 }}>AVI</p>
               <p style={{ fontWeight: 800, fontSize: '0.95rem', color: '#1A2332', fontFamily: 'var(--font-display)' }}>Ma Proforma</p>
               <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
-                <span style={{ fontSize: '0.65rem', color: '#2A4F87', cursor: 'pointer', textDecoration: 'underline' }}>Proforma</span>
+                <span style={{ fontSize: '0.65rem', color: '#2563EB', cursor: 'pointer', textDecoration: 'underline' }}>Proforma</span>
                 <span style={{ fontSize: '0.65rem', color: '#94A3B8', cursor: 'pointer' }}>Preuve de paiement</span>
               </div>
             </div>
@@ -76,8 +77,8 @@ export function Step8({ onNext, onBack }: Step8Props): JSX.Element {
             <div style={{ padding: '14px 16px' }}>
               <div style={{ marginBottom: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                  <div style={{ width: 20, height: 20, background: '#2A4F87', borderRadius: 4 }} />
-                  <span style={{ fontWeight: 800, fontSize: '0.72rem', color: '#2A4F87' }}>BOAZ-STUDY</span>
+                  <div style={{ width: 20, height: 20, background: '#2563EB', borderRadius: 4 }} />
+                  <span style={{ fontWeight: 800, fontSize: '0.72rem', color: '#2563EB' }}>BOAZ-STUDY</span>
                 </div>
                 <p style={{ fontSize: '0.68rem', color: '#374151', lineHeight: 1.4 }}>Boaz Study Cameroun SAS<br/>Yaoundé-Total Ecole de Police<br/>389 Rue Toyota Bonapriso<br/>B.P: 1230 Douala</p>
                 <p style={{ fontSize: '0.68rem', color: '#374151', marginTop: 4 }}>Date : 11/03/2025</p>
